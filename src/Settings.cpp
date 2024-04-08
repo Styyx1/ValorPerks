@@ -176,31 +176,9 @@ void Settings::LoadForms()
     if (MAG_ParryWindowEffectFormID)
         MAG_ParryWindowEffect = skyrim_cast<RE::EffectSetting*>(dataHandler->LookupForm(MAG_ParryWindowEffectFormID, FileName));
 
-    //if (MAG_levelBasedDifficultyFormID)
+
+    // Hardcoded loads
     MAG_levelBasedDifficulty = dataHandler->LookupForm(RE::FormID(ParseFormID("0xD91")), FileName)->As<RE::TESGlobal>();
-
-	//Hardcoded loads
-    //MAGParryControllerSpell      = dataHandler->LookupForm(ParseFormID("0x817"), FileName)->As<RE::SpellItem>();
-    //MAGParryStaggerSpell         = dataHandler->LookupForm(ParseFormID("0x816"), FileName)->As<RE::SpellItem>();
-    //MAGBlockStaggerSpell         = dataHandler->LookupForm(ParseFormID("0x855"), FileName)->As<RE::SpellItem>();
-    //MAGBlockStaggerSpell2        = dataHandler->LookupForm(ParseFormID("0x858"), FileName)->As<RE::SpellItem>();
-    //MAGCrossbowStaminaDrainSpell = dataHandler->LookupForm(ParseFormID("0x873"), FileName)->As<RE::SpellItem>();
-    
-    //MAG_InjuryCooldown1          = dataHandler->LookupForm(ParseFormID("0x84F"), FileName)->As<RE::EffectSetting>();
-    //MAG_InjuryCooldown2          = dataHandler->LookupForm(ParseFormID("0x850"), FileName)->As<RE::EffectSetting>();
-    //MAG_ParryWindowEffect        = dataHandler->LookupForm(ParseFormID("0x815"), FileName)->As<RE::EffectSetting>();
-
-    //MAG_levelBasedDifficulty   = dataHandler->LookupForm(ParseFormID("0x854"), FileName)->As<RE::TESGlobal>();
-    //MAG_PowerAttackReplacement = dataHandler->LookupForm(ParseFormID("0xA9B"), FileName)->As<RE::TESGlobal>();
-    //MAG_InjuryAndRest          = dataHandler->LookupForm(ParseFormID("0x83F"), FileName)->As<RE::TESGlobal>();
-    //HealthPenaltyUIGlobal      = dataHandler->LookupForm(RE::FormID(0x2EDE), "Update.esm")->As<RE::TESGlobal>();
-
-	auto smGlobal = dataHandler->LookupForm(RE::FormID(0x826), "ccqdrsse001-survivalmode.esl");
-
-	if (smGlobal) {
-		Survival_ModeEnabled = smGlobal->As<RE::TESGlobal>();
-	}
-
 
 	SetGlobalsAndGameSettings();
 

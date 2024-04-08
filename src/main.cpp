@@ -47,7 +47,6 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
 		if (settings) {
 			settings->LoadForms();
 			settings->AdjustWeaponStaggerVals();
-			// settings->ReplacePowerAttackKeywords();
 		}
 
 		break;
@@ -57,8 +56,8 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
 extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version = []() {
     SKSE::PluginVersionData v{};
     v.PluginVersion(REL::Version{ 3,5,0,0 });
-    v.PluginName("BladeAndBlunt"sv);
-    v.AuthorName("colinswrath and Kernalsegg"sv);
+    v.PluginName("ValorPerks"sv);
+    v.AuthorName("colinswrath and Kernalsegg modified by Styyx"sv);
     v.UsesAddressLibrary(true);
     v.HasNoStructUse(true);
     v.UsesStructsPost629(false);
@@ -92,14 +91,7 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse)
 		return false;
 	}
 
-	//if (auto serialization = SKSE::GetSerializationInterface()) {
-	//	serialization->SetUniqueID(Serialization::ID);
-	//	serialization->SetSaveCallback(&Serialization::SaveCallback);
-	//	serialization->SetLoadCallback(&Serialization::LoadCallback);
-	//	serialization->SetRevertCallback(&Serialization::RevertCallback);
-	//}
-
-	logger::info("Blade and Blunt loaded.");
+	logger::info("Valor Perks loaded.");
 	spdlog::default_logger()->flush();
 	return true;
 }

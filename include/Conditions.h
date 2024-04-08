@@ -63,18 +63,6 @@ namespace Conditions
 		return false;
 	}
 
-	static bool IsSurvivalEnabled() {
-		auto settings = Settings::GetSingleton();
-		if (!settings || !settings->Survival_ModeEnabled) {
-			return false;
-		} 
-
-		if (settings->Survival_ModeEnabled->value == 1.0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	static inline float GetMaxHealth()
 	{

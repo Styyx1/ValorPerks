@@ -22,7 +22,6 @@ public:
 	RE::FormID BashPerkFormId;
 	RE::FormID BlockPerkFormId;
 	RE::FormID BlockStaggerPerkFormId;
-  
 	RE::FormID DualWieldReplaceFormId;
 
     // new
@@ -32,8 +31,6 @@ public:
     RE::FormID MAGBlockStaggerSpell2FormID;
     RE::FormID MAGCrossbowStaminaDrainSpellFormID;
     RE::FormID MAG_ParryWindowEffectFormID;
-    RE::FormID MAG_levelBasedDifficultyFormID;
-
 
 	RE::SpellItem* IsAttackingSpell;
 	RE::SpellItem* IsBlockingSpell;
@@ -48,36 +45,22 @@ public:
 	RE::SpellItem* MAGBlockStaggerSpell2;
 	RE::SpellItem* MAGParryControllerSpell;
 	RE::SpellItem* MAGCrossbowStaminaDrainSpell;
-
 	
 	RE::BGSPerk* BashStaminaPerk;
 	RE::BGSPerk* BlockStaminaPerk;
-	RE::BGSPerk* BlockStaggerPerk;
-
-
-	RE::TESGlobal* Survival_ModeEnabled;
-	
+	RE::BGSPerk* BlockStaggerPerk;	
 
 	RE::TESGlobal* MAG_levelBasedDifficulty;
-	RE::TESGlobal* MAG_InjuryAndRest;
-	RE::TESGlobal* HealthPenaltyUIGlobal;
-	RE::TESGlobal* MAG_PowerAttackReplacement;
-
+	
 	RE::EffectSetting* MAG_ParryWindowEffect;
-	RE::EffectSetting* MAG_InjuryCooldown1;
-	RE::EffectSetting* MAG_InjuryCooldown2;
-
 
 	RE::TESCondition* IsPowerAttacking;
-
 
 	bool enableSneakStaminaCost;
 	bool enableLevelDifficulty;
 	
 	bool zeroAllWeapStagger;
-	bool armorScalingEnabled;
-
-	
+	bool armorScalingEnabled;	
 
 	bool IsBlockingWeaponSpellCasted = false;
 
