@@ -43,7 +43,7 @@ This was made for Blade and Blunt - A Combat Overhaul by SimonMagus616.
 
 ## Building
 ```
-git clone https://github.com/colinswrath/BladeAndBlunt
+git clone https://github.com/Styyx1/ValorPerks
 cd ExamplePlugin-CommonLibSSE
 git submodule update --init --recursive
 cmake -B build -S .
