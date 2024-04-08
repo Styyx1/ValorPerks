@@ -1,3 +1,8 @@
+This is a modified version of Blade and Blunt with the original Readme.md included below.
+All credit go to the original author colinswrath as I just removed some stuff as requested by the Author of ValorPerks
+
+# Original Readme: 
+
 This is a CommonLib implementation of a .NETScriptFramework plugin originally written by KernalsEgg. 
 Much of the credit for the RE work goes to KernalsEgg.
 
@@ -40,6 +45,8 @@ This was made for Blade and Blunt - A Combat Overhaul by SimonMagus616.
 * Open `x64 Native Tools Command Prompt`
 * Run `cmake`
 * Close the cmd window
+
+
 
 ## Building
 ```
