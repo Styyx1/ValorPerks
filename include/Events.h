@@ -1,7 +1,7 @@
 #pragma once
 #include <Conditions.h>
-
 #include <RecentHitEventData.h>
+
 
 class OnHitEventHandler : public RE::BSTEventSink<RE::TESHitEvent>
 {
@@ -26,7 +26,6 @@ public:
 		if (!a_event || !a_event->target || !a_event->cause) {
 			return RE::BSEventNotifyControl::kContinue;
 		}
-
 		auto causeActor = a_event->cause->As<RE::Actor>();
 		auto targetActor = a_event->target->As<RE::Actor>();
 	
@@ -37,7 +36,6 @@ public:
 
 			if (!skipEvent) {			
 				auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
-				auto spellItem = RE::TESForm::LookupByID<RE::SpellItem>(a_event->source);
 
 				//Something is effed with power attacks. The source isnt coming through and casting as a weapon and the hit flags are empty
 				//We can work around it like this
@@ -63,23 +61,23 @@ public:
 
 				bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) || targetActor->IsBlocking();
 
-
-				auto leftHand = targetActor->GetEquippedObject(true);
+                auto leftHand = targetActor->GetEquippedObject(true);
 
 				bool blockedMeleeHit = false;
 				if (!a_event->projectile && 
 					((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) &&
 					isBlocking) {
 					blockedMeleeHit = true;
-				}
+				}				
 				
-				//Shield Stagger
-				if /*(leftHand && leftHand->IsArmor() && blockedMeleeHit){
-					ProcessHitEventForBlockStagger(targetActor, causeActor);
-				} else if */(blockedMeleeHit) {
-					//Parry
-					ProcessHitEventForParry(targetActor,causeActor);
-				}
+				// Shield Stagger
+                if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
+                    ProcessHitEventForParry(targetActor, causeActor);
+                }
+                else if (blockedMeleeHit) {
+                    // Parry
+                    ProcessHitEventForParry(targetActor, causeActor);
+                }
 				recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
 			}
 		}

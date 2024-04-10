@@ -1,6 +1,7 @@
 #include "Hooks.h"
 #include "Cache.h"
 #include "Events.h"
+#include "Serialization.h"
 
 
 
@@ -82,7 +83,7 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse)
 		logger::error("Hook installation failed.");
 		return false;
 	}
-
+    
 	OnHitEventHandler::Register();
 
 	auto messaging = SKSE::GetMessagingInterface();
@@ -90,6 +91,13 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse)
 	{
 		return false;
 	}
+
+    
+	 if (auto serialization = SKSE::GetSerializationInterface()) {
+    	serialization->SetUniqueID(Serialization::ID);
+    	serialization->SetSaveCallback(&Serialization::SaveCallback);
+    	serialization->SetLoadCallback(&Serialization::LoadCallback);        
+     }
 
 	logger::info("Valor Perks loaded.");
 	spdlog::default_logger()->flush();

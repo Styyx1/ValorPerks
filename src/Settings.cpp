@@ -2,6 +2,7 @@
 #include <SimpleIni.h>
 #include <sstream>
 #include "Cache.h"
+#include "Conditions.h"
 
 Settings* Settings::GetSingleton()
 {
@@ -32,6 +33,15 @@ void Settings::LoadSettings()
 	std::string blockPerkFormId((ini.GetValue("", "BlockStaminaPerkFormId", "")));
 	std::string blockStaggerPerkFormId((ini.GetValue("", "BlockStaggerPerkFormId", "")));
 
+    //new
+
+    std::string parryControllerSpellID((ini.GetValue("", "MAGParryControllerSpellID", "")));
+    std::string parryStaggerSpellID((ini.GetValue("", "MAGParryStaggerSpellFormID", "")));
+    std::string BlockStaggerSpellID1((ini.GetValue("", "MAGBlockStaggerSpellFormID", "")));
+    std::string BlockStaggerSpellID2((ini.GetValue("", "MAGBlockStaggerSpell2FormID", "")));
+    std::string CrossbowStaminaDrainSpellID((ini.GetValue("", "MAGCrossbowStaminaDrainSpellFormID", "")));
+    std::string parryWindowEffectID((ini.GetValue("", "MAG_ParryWindowEffectFormID", "")));
+    std::string levelBasedDifficultyID((ini.GetValue("", "MAG_levelBasedDifficultyFormID", "")));
 
 	std::string fileName(ini.GetValue("", "sModFileName", ""));
 
@@ -78,7 +88,26 @@ void Settings::LoadSettings()
 	if (!blockStaggerPerkFormId.empty()) {
 		BlockStaggerPerkFormId = ParseFormID(blockStaggerPerkFormId);
 	}
+    // new
 
+    if (!parryControllerSpellID.empty()) {
+        MAGParryControllerSpellID = ParseFormID(parryControllerSpellID);
+    }
+    if (!parryStaggerSpellID.empty()) {
+        MAGParryStaggerSpellFormID = ParseFormID(parryStaggerSpellID);
+    }
+    if (!BlockStaggerSpellID1.empty()) {
+        MAGBlockStaggerSpellFormID = ParseFormID(BlockStaggerSpellID1);
+    }
+    if (!BlockStaggerSpellID2.empty()) {
+        MAGBlockStaggerSpell2FormID = ParseFormID(BlockStaggerSpellID2);
+    }
+    if (!CrossbowStaminaDrainSpellID.empty()) {
+        MAGCrossbowStaminaDrainSpellFormID = ParseFormID(CrossbowStaminaDrainSpellID);
+    }
+    if (!parryWindowEffectID.empty()) {
+        MAG_ParryWindowEffectFormID = ParseFormID(parryWindowEffectID);
+    }
 
 	FileName = fileName;
 }
@@ -112,17 +141,17 @@ void Settings::AdjustWeaponStaggerVals()
 	}
 }
 
-
 void Settings::LoadForms()
 {
 	auto dataHandler = RE::TESDataHandler::GetSingleton();
 
-	auto file = LookupLoadedModByName(FileName);
+	 auto file = LookupLoadedModByName(FileName);
 
 	if (!file || file->compileIndex == 0xFF) {
 
 		SKSE::stl::report_and_fail("Cannot find ValorPerks.esp. If you are on Skyrim 1.6.1130+, Engine Fixes' achievements enabler may be disabling all of your plugins."sv);
 	}
+    
 
 	logger::info("Loading forms");
 	if (IsBlockingSpellFormId)
@@ -175,10 +204,10 @@ void Settings::LoadForms()
 
     if (MAG_ParryWindowEffectFormID)
         MAG_ParryWindowEffect = skyrim_cast<RE::EffectSetting*>(dataHandler->LookupForm(MAG_ParryWindowEffectFormID, FileName));
-
-
+ 
     // Hardcoded loads
     MAG_levelBasedDifficulty = dataHandler->LookupForm(RE::FormID(ParseFormID("0xD91")), FileName)->As<RE::TESGlobal>();
+
 
 	SetGlobalsAndGameSettings();
 
@@ -190,7 +219,7 @@ void Settings::LoadForms()
 	isPowerAttackingCond->head = isPowerAttacking;
 	IsPowerAttacking = isPowerAttackingCond;
 
-	logger::info("Forms loaded");
+	logger::info("All Forms loaded");
 
 }
 
@@ -206,7 +235,8 @@ void Settings::SetGlobalsAndGameSettings()
 	if (armorScalingEnabled) {
 		logger::info("Setting max armor rating to 90");
 		maxRatingSetting->data.f = 90.0f;
-	} else {
+	}
+    else {
 		logger::info("Setting max armor rating to 75");
 		maxRatingSetting->data.f = 75.0f;
 	}
