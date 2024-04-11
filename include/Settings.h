@@ -31,6 +31,7 @@ public:
     RE::FormID MAGBlockStaggerSpell2FormID;
     RE::FormID MAGCrossbowStaminaDrainSpellFormID;
     RE::FormID MAG_ParryWindowEffectFormID;
+    RE::FormID APOParryBuffSpellFormID;
 
     RE::SpellItem* IsAttackingSpell;
     RE::SpellItem* IsBlockingSpell;
@@ -45,6 +46,7 @@ public:
     RE::SpellItem* MAGBlockStaggerSpell2;
     RE::SpellItem* MAGParryControllerSpell;
     RE::SpellItem* MAGCrossbowStaminaDrainSpell;
+    RE::SpellItem* APOParryBuffSPell;
 
     RE::BGSPerk* BashStaminaPerk;
     RE::BGSPerk* BlockStaminaPerk;

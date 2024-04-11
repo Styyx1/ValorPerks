@@ -42,8 +42,11 @@ void Settings::LoadSettings()
     std::string CrossbowStaminaDrainSpellID((ini.GetValue("", "MAGCrossbowStaminaDrainSpellFormID", "")));
     std::string parryWindowEffectID((ini.GetValue("", "MAG_ParryWindowEffectFormID", "")));
     std::string levelBasedDifficultyID((ini.GetValue("", "MAG_levelBasedDifficultyFormID", "")));
+    std::string apoParryBuffSpellID((ini.GetValue("", "ParryBuffSpellFormID", "")));
 
 	std::string fileName(ini.GetValue("", "sModFileName", ""));
+
+
 
 	if(!attackingSpellFormID.empty()){
 		IsAttackingSpellFormId = ParseFormID(attackingSpellFormID);
@@ -107,6 +110,10 @@ void Settings::LoadSettings()
     }
     if (!parryWindowEffectID.empty()) {
         MAG_ParryWindowEffectFormID = ParseFormID(parryWindowEffectID);
+    }
+
+    if (!apoParryBuffSpellID.empty()) {
+        APOParryBuffSpellFormID = ParseFormID(apoParryBuffSpellID);
     }
 
 	FileName = fileName;
@@ -204,6 +211,9 @@ void Settings::LoadForms()
 
     if (MAG_ParryWindowEffectFormID)
         MAG_ParryWindowEffect = skyrim_cast<RE::EffectSetting*>(dataHandler->LookupForm(MAG_ParryWindowEffectFormID, FileName));
+
+    if (APOParryBuffSpellFormID)
+        APOParryBuffSPell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOParryBuffSpellFormID, FileName));
  
     // Hardcoded loads
     MAG_levelBasedDifficulty = dataHandler->LookupForm(RE::FormID(ParseFormID("0xD91")), FileName)->As<RE::TESGlobal>();

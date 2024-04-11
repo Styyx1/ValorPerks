@@ -87,8 +87,10 @@ public:
 	static void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
 	{
 		auto settings = Settings::GetSingleton();
+        auto player   = Cache::GetPlayerSingleton();
 		if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
 			Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
+            Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
 		}
 	}
 
