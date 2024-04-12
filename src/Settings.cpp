@@ -43,6 +43,10 @@ void Settings::LoadSettings()
     std::string parryWindowEffectID((ini.GetValue("", "MAG_ParryWindowEffectFormID", "")));
     std::string levelBasedDifficultyID((ini.GetValue("", "MAG_levelBasedDifficultyFormID", "")));
     std::string apoParryBuffSpellID((ini.GetValue("", "ParryBuffSpellFormID", "")));
+    std::string APOSparksNormalBlockID((ini.GetValue("", "NormalBlockSparksID", "")));
+    std::string APOSparksPhysicsBlockID((ini.GetValue("", "PhysicBlockSparksID", "")));
+    std::string APOSparksFlashID((ini.GetValue("", "FlashBlockSparksID", "")));
+    std::string APOSparksShieldFlashID((ini.GetValue("", "ShieldFlashBlockSparksID", "")));
 
 	std::string fileName(ini.GetValue("", "sModFileName", ""));
 
@@ -114,6 +118,18 @@ void Settings::LoadSettings()
 
     if (!apoParryBuffSpellID.empty()) {
         APOParryBuffSpellFormID = ParseFormID(apoParryBuffSpellID);
+    }
+    if (!APOSparksNormalBlockID.empty()) {
+        APONormalBlockSparksFormID = ParseFormID(APOSparksNormalBlockID);
+    }
+    if (!APOSparksPhysicsBlockID.empty()) {
+        APOPhysicBlockSparksFormID = ParseFormID(APOSparksPhysicsBlockID);
+    }
+    if (!APOSparksFlashID.empty()) {
+        APOFlashSparksFormID = ParseFormID(APOSparksFlashID);
+    }
+    if (!APOSparksShieldFlashID.empty()) {
+        APOShieldFlashSparksFormID = ParseFormID(APOSparksShieldFlashID);
     }
 
 	FileName = fileName;
@@ -214,10 +230,22 @@ void Settings::LoadForms()
 
     if (APOParryBuffSpellFormID)
         APOParryBuffSPell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOParryBuffSpellFormID, FileName));
+
+    if (APONormalBlockSparksFormID)
+        APOSparks = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APONormalBlockSparksFormID, FileName));
+
+    if (APOPhysicBlockSparksFormID)
+        APOSparksPhysics = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOPhysicBlockSparksFormID, FileName));
+
+    if (APOFlashSparksFormID)
+        APOSparksFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOFlashSparksFormID, FileName));
+
+    if (APOShieldFlashSparksFormID)
+        APOSparksShieldFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOShieldFlashSparksFormID, FileName));
  
     // Hardcoded loads
     MAG_levelBasedDifficulty = dataHandler->LookupForm(RE::FormID(ParseFormID("0xD91")), FileName)->As<RE::TESGlobal>();
-
+    //APOSparks = dataHandler->LookupForm(RE::FormID(ParseFormID("0x18E3B")), FileName)->As<RE::BGSExplosion>();
 
 	SetGlobalsAndGameSettings();
 

@@ -32,6 +32,11 @@ public:
     RE::FormID MAGCrossbowStaminaDrainSpellFormID;
     RE::FormID MAG_ParryWindowEffectFormID;
     RE::FormID APOParryBuffSpellFormID;
+    RE::FormID APONormalBlockSparksFormID;
+    RE::FormID APOPhysicBlockSparksFormID;
+    RE::FormID APOFlashSparksFormID;
+    RE::FormID APOShieldFlashSparksFormID;
+    
 
     RE::SpellItem* IsAttackingSpell;
     RE::SpellItem* IsBlockingSpell;
@@ -51,6 +56,11 @@ public:
     RE::BGSPerk* BashStaminaPerk;
     RE::BGSPerk* BlockStaminaPerk;
     RE::BGSPerk* BlockStaggerPerk;
+
+    RE::BGSExplosion* APOSparks;
+    RE::BGSExplosion* APOSparksPhysics;
+    RE::BGSExplosion* APOSparksFlash;
+    RE::BGSExplosion* APOSparksShieldFlash;
 
     RE::TESGlobal* MAG_levelBasedDifficulty;
 
