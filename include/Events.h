@@ -1,7 +1,6 @@
 #pragma once
 #include <Conditions.h>
 #include <RecentHitEventData.h>
-#include <BlockSparks.h>
 
 
 class OnHitEventHandler : public RE::BSTEventSink<RE::TESHitEvent>
@@ -81,9 +80,63 @@ public:
                     auto settings = Settings::GetSingleton();
                     targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                     targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
-                    logger::info("processed parry visuals");
                     ProcessHitEventForParry(targetActor, causeActor);
-                    logger::info("Applied parry buff spell");
+
+                }
+                recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
+            }
+        }
+        else if (causeActor && targetActor && causeActor->IsPlayerRef() && !targetActor->IsPlayerRef()) {
+            auto applicationRuntime = GetDurationOfApplicationRunTime();
+
+            bool skipEvent = ShouldSkipHitEvent(causeActor, targetActor, applicationRuntime); // Filters out dupe events
+
+            if (!skipEvent) {
+                auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
+
+                // Something is effed with power attacks. The source isnt coming through and casting as a weapon and the hit flags are empty
+                // We can work around it like this
+                bool powerAttackMelee = false;
+                if (a_event->flags.any(RE::TESHitEvent::Flag::kPowerAttack) || Conditions::IsPowerAttacking(causeActor)) {
+                    bool rightIsMeleeWeapon = false;
+                    if (auto rightHandForm = causeActor->GetEquippedObject(false)) {
+                        if (rightHandForm->IsWeapon() && rightHandForm->As<RE::TESObjectWEAP>()->IsMelee()) {
+                            rightIsMeleeWeapon = true;
+                        }
+                    }
+
+                    bool LeftIsMeleeWeaponOrNone = false;
+                    auto leftHandForm            = causeActor->GetEquippedObject(true);
+                    if (!leftHandForm || (leftHandForm->IsWeapon() && leftHandForm->As<RE::TESObjectWEAP>()->IsMelee()) || leftHandForm->IsArmor()) {
+                        LeftIsMeleeWeaponOrNone = true;
+                    }
+
+                    if (rightIsMeleeWeapon && LeftIsMeleeWeaponOrNone) {
+                        powerAttackMelee = true;
+                    }
+                }
+
+                bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) || targetActor->IsBlocking();
+
+                auto leftHand = targetActor->GetEquippedObject(true);
+
+                bool blockedMeleeHit = false;
+                if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
+                    blockedMeleeHit = true;
+                }
+
+                // Shield Parry (different hit explosion effects)
+                if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
+                    auto settings = Settings::GetSingleton();
+                    targetActor->PlaceObjectAtMe(settings->APOSparks, false);
+                    targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
+
+                }
+                else if (blockedMeleeHit) {
+                    // Weapon Parry
+                    auto settings = Settings::GetSingleton();
+                    targetActor->PlaceObjectAtMe(settings->APOSparks, false);
+                    targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                 }
                 recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
             }
