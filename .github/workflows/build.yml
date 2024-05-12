@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "**.h"
+      - "**.cpp"
+      - "**.yml"
+  workflow_dispatch:
+
+env:
+  VCPKG_COMMIT_ID: 28b1cf627c0570b3e094192df2fce31a3a2bc1d3
+
+jobs:
+  test-build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        preset:
+          - release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
+
+      - name: Initialize submodules
+        run: git submodule update --init --recursive
+
+      - name: Run CMake
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: build-${{ matrix.preset }}-msvc
+          buildPreset: ${{ matrix.preset }}-msvc
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: ValorPerks
+            path: ${{ github.workspace }}/contrib/PluginRelease

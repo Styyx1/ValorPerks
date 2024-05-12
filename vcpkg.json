@@ -1,21 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "valorperks",
-  "version-semver": "3.5.0",
-  "dependencies": [
-    "fmt",
-    "spdlog",
-    "rapidcsv",
-    "simpleini",
-    "xbyak",
-    "clib-util"
-  ],
-  "license": "GPL-3.0-or-later",
-  "vcpkg-configuration": {
-    "default-registry": {
-      "kind": "git",
-      "repository": "https://github.com/microsoft/vcpkg",
-      "baseline": "095ee06e7f60dceef7d713e3f8b1c2eb10d650d7"
-    }
-  }
+  "version-semver": "1.0.0",
+  "builtin-baseline": "28b1cf627c0570b3e094192df2fce31a3a2bc1d3",
+  "dependencies": [ "fmt", "spdlog", "rapidcsv", "simpleini","xbyak", "directxtk" ],
+  "license": "GPL-3.0-or-later"
 }

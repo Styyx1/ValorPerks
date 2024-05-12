@@ -168,7 +168,8 @@ void Settings::LoadForms()
 {
 	auto dataHandler = RE::TESDataHandler::GetSingleton();
 
-	 auto file = LookupLoadedModByName(FileName);
+	 auto file = dataHandler->LookupLoadedModByName(FileName);
+    ;
 
 	if (!file || file->compileIndex == 0xFF) {
 

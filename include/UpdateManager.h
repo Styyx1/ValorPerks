@@ -140,22 +140,22 @@ private:
                         if (!HasSpell(player, settings->IsSprintingSpell))
                             player->AddSpell(settings->IsSprintingSpell);
 
-                        /*RE::ActorPtr mount = nullptr;
+                        RE::ActorPtr mount = nullptr;
 
                         GetMount(player, &mount);
                         if (mount) {
                             mount->AddSpell(settings->MountSprintingSpell);
-                        }*/
+                        }
                     }
                     else if (HasSpell(player, settings->IsSprintingSpell)) {
                         player->RemoveSpell(settings->IsSprintingSpell);
 
-                        /*RE::ActorPtr mount = nullptr;
+                        RE::ActorPtr mount = nullptr;
                         GetMount(player, &mount);
 
                         if (mount) {
                             mount->RemoveSpell(settings->MountSprintingSpell);
-                        }*/
+                        }
                     }
                 } break;
                 default:
@@ -167,12 +167,12 @@ private:
         return _OnFrameFunction(a1);
     }
 
-    /*static bool GetMount(RE::Actor* a_actor, RE::ActorPtr* a_mountOut)
+    static bool GetMount(RE::Actor* a_actor, RE::ActorPtr* a_mountOut)
     {
         using func_t = decltype(&GetMount);
         REL::Relocation<func_t> func{ REL::RelocationID(37757, 38702) };
         return func(a_actor, a_mountOut);
-    }*/
+    }
 
 	inline static REL::Relocation<decltype(OnFrameUpdate)> _OnFrameFunction;
 
@@ -180,7 +180,7 @@ private:
 	{
 		auto attackState = player->AsActorState()->GetAttackState();
 
-		if (playerCamera->bowZoomedIn) {
+		if (playerCamera->zoomInput) {
 			return false;
 		}
 
@@ -209,7 +209,7 @@ private:
 	{
 		auto attackState = player->AsActorState()->GetAttackState();
 
-		if (playerCamera->bowZoomedIn) 
+		if (playerCamera->GetRuntimeData2().bowZoomedIn) 
 		{
 			return false;
 		}

@@ -1,4 +1,4 @@
 build
 *ReSharper*
 .vs
-extern
+contrib/PluginRelease
