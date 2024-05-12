@@ -3,6 +3,13 @@
   "name": "valorperks",
   "version-semver": "1.0.0",
   "builtin-baseline": "28b1cf627c0570b3e094192df2fce31a3a2bc1d3",
-  "dependencies": [ "fmt", "spdlog", "rapidcsv", "simpleini","xbyak", "directxtk" ],
+  "dependencies": [
+    "fmt",
+    "spdlog",
+    "rapidcsv",
+    "simpleini",
+    "xbyak",
+    "directxtk"
+  ],
   "license": "GPL-3.0-or-later"
 }

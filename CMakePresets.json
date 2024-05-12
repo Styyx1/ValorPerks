@@ -71,7 +71,7 @@
     },
     {
       "name": "build-release-msvc",
-      "inherits": [ "base", "vcpkg", "win32-unicode", "x64", "msvc" ],
+      "inherits": ["base", "vcpkg", "win32-unicode", "x64", "msvc"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       },
@@ -81,7 +81,7 @@
     },
     {
       "name": "build-debug-msvc",
-      "inherits": [ "base", "vcpkg", "win32-unicode", "x64", "msvc" ],
+      "inherits": ["base", "vcpkg", "win32-unicode", "x64", "msvc"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       },
