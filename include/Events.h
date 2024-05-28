@@ -58,11 +58,17 @@ public:
                         powerAttackMelee = true;
                     }
                 }
+                auto defender        = a_event->target->As<RE::Actor>();
+                auto defenderProcess = defender->GetActorRuntimeData().currentProcess;
+                auto player          = a_event->cause->As<RE::Actor>();
+                auto playerAttkData  = player->GetActorRuntimeData().currentProcess->high->attackData;
+                if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && a_event->cause->IsPlayerRef() && !IsBeastRace() && attackingWeapon->IsHandToHandMelee())
+                {
+                    ApplyHandToHandXP();
+                };
 
                 bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) || targetActor->IsBlocking();
-
                 auto leftHand = targetActor->GetEquippedObject(true);
-
                 bool blockedMeleeHit = false;
                 if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
                     blockedMeleeHit = true;
@@ -164,6 +170,24 @@ public:
         }
     }
 
+    inline static void ApplyHandToHandXP()
+    {
+        auto player = RE::PlayerCharacter::GetSingleton();
+
+        float HandToHandLevel = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kLockpicking);
+
+        float baseXP = (Settings::BonusXPPerLevel * HandToHandLevel) + Settings::BaseXP;
+
+        player->AddSkillExperience(RE::ActorValue::kLockpicking, baseXP);
+    }
+
+    static bool IsBeastRace()
+    {
+        RE::MenuControls* MenuControls = RE::MenuControls::GetSingleton();
+        return MenuControls->InBeastForm();
+    }
+
+
 	bool ShouldSkipHitEvent(RE::Actor* causeActor, RE::Actor* targetActor, std::uint32_t runTime)
 	{
 		bool skipEvent = false;
@@ -190,6 +214,91 @@ public:
 		RE::ScriptEventSourceHolder* eventHolder = RE::ScriptEventSourceHolder::GetSingleton();
 		eventHolder->AddEventSink(OnHitEventHandler::GetSingleton());
 	}
+};
+
+class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphEvent>,
+                                   public RE::BSTEventSink<RE::TESObjectLoadedEvent>,
+                                   public RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>
+
+{
+public:
+    static AnimationGraphEventHandler* GetSingleton()
+    {
+        static AnimationGraphEventHandler singleton;
+        return &singleton;
+    }
+
+    const char* jumpAnimEventString = "JumpUp";
+
+    // Anims
+    RE::BSEventNotifyControl ProcessEvent(const RE::BSAnimationGraphEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource) override
+    {
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
+            if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
+                HandleJumpAnim();
+            }
+        }
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+    void HandleJumpAnim()
+    {
+        auto settings = Settings::GetSingleton();
+        auto player   = RE::PlayerCharacter::GetSingleton();
+        if (!player->IsGodMode()) {
+            Conditions::ApplySpell(player, player, settings->jumpSpell);
+        }
+    }
+
+    // Object load
+    RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
+    {
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        const auto actor = RE::TESForm::LookupByID<RE::Actor>(a_event->formID);
+        if (!actor || !actor->IsPlayerRef()) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        // Register for anim event
+        actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+    // Race Switch
+    RE::BSEventNotifyControl ProcessEvent(const RE::TESSwitchRaceCompleteEvent*                                a_event,
+                                          [[maybe_unused]] RE::BSTEventSource<RE::TESSwitchRaceCompleteEvent>* a_eventSource) override
+    {
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        const auto actor = a_event->subject->As<RE::Actor>();
+        if (!actor || !actor->IsPlayerRef()) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        // Register for anim event
+        actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+    static void Register()
+    {
+        // Register for load event, then in the load event register for anims
+        RE::ScriptEventSourceHolder* eventHolder = RE::ScriptEventSourceHolder::GetSingleton();
+        eventHolder->AddEventSink<RE::TESObjectLoadedEvent>(GetSingleton());
+        eventHolder->AddEventSink<RE::TESSwitchRaceCompleteEvent>(GetSingleton());
+    }
 };
 
 class WeaponFireHandler

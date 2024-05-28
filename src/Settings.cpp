@@ -47,14 +47,30 @@ void Settings::LoadSettings()
     std::string APOSparksPhysicsBlockID((ini.GetValue("", "PhysicBlockSparksID", "")));
     std::string APOSparksFlashID((ini.GetValue("", "FlashBlockSparksID", "")));
     std::string APOSparksShieldFlashID((ini.GetValue("", "ShieldFlashBlockSparksID", "")));
+    std::string jumpSpellID((ini.GetValue("", "JumpSpellID", "")));
+    std::string powerAtkStopSpellID((ini.GetValue("", "PowerAttackStopSpellID", "")));
 
 	std::string fileName(ini.GetValue("", "sModFileName", ""));
+
+    auto bonusXP = (float)ini.GetDoubleValue("", "fBonusXPPerLevel", 0.15);
+    auto baseXP  = (float)ini.GetDoubleValue("", "fBaseXPHerHit", 3.0);
+
+    (bonusXP < 0.0 || bonusXP > 100.0) ? BonusXPPerLevel = 0.15f : BonusXPPerLevel = bonusXP;
+    baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP;
 
 
 
 	if(!attackingSpellFormID.empty()){
 		IsAttackingSpellFormId = ParseFormID(attackingSpellFormID);
 	}
+
+    if (!powerAtkStopSpellID.empty()) {
+        APOPowerAttackStopSpellFormID = ParseFormID(powerAtkStopSpellID);
+    }
+
+    if (!jumpSpellID.empty()) {
+        APOJumpSpellFormID = ParseFormID(jumpSpellID);
+    }
 
 	if(!blockingSpellFormID.empty()){
 		IsBlockingSpellFormId = ParseFormID(blockingSpellFormID);
@@ -180,6 +196,12 @@ void Settings::LoadForms()
 	logger::info("Loading forms");
 	if (IsBlockingSpellFormId)
 		IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
+
+    if (APOPowerAttackStopSpellFormID)
+        PowerAttackStopSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOPowerAttackStopSpellFormID, FileName));
+
+    if (APOJumpSpellFormID)
+        jumpSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOJumpSpellFormID, FileName));
 
 	if(IsAttackingSpellFormId)
 		IsAttackingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsAttackingSpellFormId, FileName));

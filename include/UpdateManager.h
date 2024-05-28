@@ -60,6 +60,7 @@ private:
 
                 if (settings->IsSprintingSpell)
                     player->RemoveSpell(settings->IsSprintingSpell);
+
             }
             else {
                 switch (UpdateManager::frameCount) {
@@ -98,8 +99,18 @@ private:
                         if (!HasSpell(player, settings->IsAttackingSpell)) {
                             player->AddSpell(settings->IsAttackingSpell);
                         }
+
+                        settings->wasPowerAttacking = Conditions::IsPowerAttacking(player);
                     }
                     else {
+                        if (HasSpell(player, settings->IsAttackingSpell)) {
+                            player->RemoveSpell(settings->IsAttackingSpell);
+                        }
+
+                        if (settings->wasPowerAttacking) {
+                            settings->wasPowerAttacking = false;
+                            Conditions::ApplySpell(player, player, settings->PowerAttackStopSpell);
+                        }
                         if (HasSpell(player, settings->IsAttackingSpell)) {
                             player->RemoveSpell(settings->IsAttackingSpell);
                         }

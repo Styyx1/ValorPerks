@@ -23,6 +23,7 @@ public:
     RE::FormID BlockPerkFormId;
     RE::FormID BlockStaggerPerkFormId;
     RE::FormID DualWieldReplaceFormId;
+    
 
     // new
     RE::FormID MAGParryControllerSpellID;
@@ -36,6 +37,8 @@ public:
     RE::FormID APOPhysicBlockSparksFormID;
     RE::FormID APOFlashSparksFormID;
     RE::FormID APOShieldFlashSparksFormID;
+    RE::FormID APOJumpSpellFormID;
+    RE::FormID APOPowerAttackStopSpellFormID;
     
 
     RE::SpellItem* IsAttackingSpell;
@@ -52,6 +55,8 @@ public:
     RE::SpellItem* MAGParryControllerSpell;
     RE::SpellItem* MAGCrossbowStaminaDrainSpell;
     RE::SpellItem* APOParryBuffSPell;
+    RE::SpellItem* jumpSpell;
+    RE::SpellItem* PowerAttackStopSpell;
 
     RE::BGSPerk* BashStaminaPerk;
     RE::BGSPerk* BlockStaminaPerk;
@@ -76,6 +81,9 @@ public:
 
     bool IsBlockingWeaponSpellCasted = false;
 
+    bool wasPowerAttacking = false;
+    inline static float BonusXPPerLevel;
+    inline static float BaseXP;
 
     int maxFrameCheck = 6;
 

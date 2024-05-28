@@ -1,9 +1,7 @@
 #include "Hooks.h"
 #include "Cache.h"
 #include "Events.h"
-
-
-
+#include "PickpocketReplace.h"
 
 void InitLogger()
 {
@@ -49,6 +47,8 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
 			settings->LoadForms();
 			settings->AdjustWeaponStaggerVals();
 		}
+        AnimationGraphEventHandler::Register();
+        OnHitEventHandler::Register();
 
 		break;
 	}
@@ -83,8 +83,9 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse)
 		logger::error("Hook installation failed.");
 		return false;
 	}
-    
-	OnHitEventHandler::Register();
+    /*AnimationGraphEventHandler::Register();
+	OnHitEventHandler::Register();*/
+    PickpocketReplace::Install();
 
 	auto messaging = SKSE::GetMessagingInterface();
 	if (!messaging->RegisterListener(InitListener))
