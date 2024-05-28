@@ -1,6 +1,6 @@
-#include "Hooks.h"
 #include "Cache.h"
 #include "Events.h"
+#include "Hooks.h"
 #include "PickpocketReplace.h"
 
 void InitLogger()
@@ -27,36 +27,36 @@ void InitLogger()
 
 void InitListener(SKSE::MessagingInterface::Message* a_msg)
 {
-	auto settings = Settings::GetSingleton();
-	switch (a_msg->type)
-	{
-	case SKSE::MessagingInterface::kNewGame:
-	case SKSE::MessagingInterface::kPostLoadGame:
-		Settings::GetSingleton()->SetGlobalsAndGameSettings();
-		break;
-	case SKSE::MessagingInterface::kPostLoad:
-		if (!Hooks::InstallBashMultHook()) {
-			logger::error("Bash hook installation failed.");
-		} else {
-			logger::info("Bash hook installed");
-		}
+    auto settings = Settings::GetSingleton();
+    switch (a_msg->type) {
+    case SKSE::MessagingInterface::kNewGame:
+    case SKSE::MessagingInterface::kPostLoadGame:
+        Settings::GetSingleton()->SetGlobalsAndGameSettings();
+        break;
+    case SKSE::MessagingInterface::kPostLoad:
+        if (!Hooks::InstallBashMultHook()) {
+            logger::error("Bash hook installation failed.");
+        }
+        else {
+            logger::info("Bash hook installed");
+        }
 
-		break;
-	case SKSE::MessagingInterface::kDataLoaded:
-		if (settings) {
-			settings->LoadForms();
-			settings->AdjustWeaponStaggerVals();
-		}
+        break;
+    case SKSE::MessagingInterface::kDataLoaded:
+        if (settings) {
+            settings->LoadForms();
+            settings->AdjustWeaponStaggerVals();
+        }
         AnimationGraphEventHandler::Register();
         OnHitEventHandler::Register();
 
-		break;
-	}
+        break;
+    }
 }
 
 extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version = []() {
     SKSE::PluginVersionData v{};
-    v.PluginVersion(REL::Version{ 3,5,0,0 });
+    v.PluginVersion(REL::Version{ 3, 5, 0, 0 });
     v.PluginName("ValorPerks"sv);
     v.AuthorName("colinswrath and Kernalsegg modified by Styyx"sv);
     v.UsesAddressLibrary(true);
@@ -67,34 +67,31 @@ extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version = []() {
 
 SKSEPluginLoad(const SKSE::LoadInterface* skse)
 {
-	InitLogger();	//1.6
+    InitLogger(); // 1.6
 
-	SKSE::Init(skse);
+    SKSE::Init(skse);
     const auto plugin{ SKSE::PluginDeclaration::GetSingleton() };
     const auto version{ plugin->GetVersion() };
 
     logger::info("{} {} loading...", plugin->GetName(), version);
 
-	SKSE::AllocTrampoline(320);
-	Cache::CacheAddLibAddresses();
-	Settings::GetSingleton()->LoadSettings();
-	if (!Hooks::InstallHooks())
-	{
-		logger::error("Hook installation failed.");
-		return false;
-	}
+    SKSE::AllocTrampoline(320);
+    Cache::CacheAddLibAddresses();
+    Settings::GetSingleton()->LoadSettings();
+    if (!Hooks::InstallHooks()) {
+        logger::error("Hook installation failed.");
+        return false;
+    }
     /*AnimationGraphEventHandler::Register();
 	OnHitEventHandler::Register();*/
     PickpocketReplace::Install();
 
-	auto messaging = SKSE::GetMessagingInterface();
-	if (!messaging->RegisterListener(InitListener))
-	{
-		return false;
-	}
+    auto messaging = SKSE::GetMessagingInterface();
+    if (!messaging->RegisterListener(InitListener)) {
+        return false;
+    }
 
-
-	logger::info("Valor Perks loaded.");
-	spdlog::default_logger()->flush();
-	return true;
+    logger::info("Valor Perks loaded.");
+    spdlog::default_logger()->flush();
+    return true;
 }

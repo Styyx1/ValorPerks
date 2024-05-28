@@ -12,7 +12,6 @@ namespace Serialization
             logger::error("Failed to open blade and blunt record");
             return;
         }
-
     }
 
     inline void LoadCallback(SKSE::SerializationInterface* a_skse)
@@ -21,7 +20,6 @@ namespace Serialization
         std::uint32_t version;
         std::uint32_t length;
         a_skse->GetNextRecordInfo(type, version, length);
-
 
         if (type != SerializationType) {
             return;
@@ -37,7 +35,6 @@ namespace Serialization
             logger::error("Failed to load size");
             return;
         }
-
     }
 
 } // namespace Serialization

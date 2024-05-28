@@ -23,7 +23,6 @@ public:
     RE::FormID BlockPerkFormId;
     RE::FormID BlockStaggerPerkFormId;
     RE::FormID DualWieldReplaceFormId;
-    
 
     // new
     RE::FormID MAGParryControllerSpellID;
@@ -39,7 +38,6 @@ public:
     RE::FormID APOShieldFlashSparksFormID;
     RE::FormID APOJumpSpellFormID;
     RE::FormID APOPowerAttackStopSpellFormID;
-    
 
     RE::SpellItem* IsAttackingSpell;
     RE::SpellItem* IsBlockingSpell;
@@ -81,7 +79,7 @@ public:
 
     bool IsBlockingWeaponSpellCasted = false;
 
-    bool wasPowerAttacking = false;
+    bool                wasPowerAttacking = false;
     inline static float BonusXPPerLevel;
     inline static float BaseXP;
 
@@ -90,5 +88,4 @@ public:
     static RE::FormID ParseFormID(const std::string& str);
 
     std::string FileName;
-
 };

@@ -1,9 +1,8 @@
 #pragma once
 
+#include "Cache.h"
 #include "Conditions.h"
 #include "Hooks.h"
-#include "Cache.h"
-
 
 static float lastTime;
 
@@ -60,7 +59,6 @@ private:
 
                 if (settings->IsSprintingSpell)
                     player->RemoveSpell(settings->IsSprintingSpell);
-
             }
             else {
                 switch (UpdateManager::frameCount) {
@@ -185,71 +183,65 @@ private:
         return func(a_actor, a_mountOut);
     }
 
-	inline static REL::Relocation<decltype(OnFrameUpdate)> _OnFrameFunction;
+    inline static REL::Relocation<decltype(OnFrameUpdate)> _OnFrameFunction;
 
-	static bool IsXbowDrawCheck(RE::PlayerCharacter* player, RE::PlayerCamera* playerCamera)
-	{
-		auto attackState = player->AsActorState()->GetAttackState();
+    static bool IsXbowDrawCheck(RE::PlayerCharacter* player, RE::PlayerCamera* playerCamera)
+    {
+        auto attackState = player->AsActorState()->GetAttackState();
 
-		if (playerCamera->zoomInput) {
-			return false;
-		}
+        if (playerCamera->zoomInput) {
+            return false;
+        }
 
-		auto equippedWeapon = skyrim_cast<RE::TESObjectWEAP*>(player->GetEquippedObject(false));
-		if (!equippedWeapon) {
-			return false;
-		}
+        auto equippedWeapon = skyrim_cast<RE::TESObjectWEAP*>(player->GetEquippedObject(false));
+        if (!equippedWeapon) {
+            return false;
+        }
 
-		switch (attackState) {
-		case RE::ATTACK_STATE_ENUM::kBowDrawn:
-			{
-				if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kCrossbow) {
-					return true;
-				}
-				break;
-			}
-		default:
-			{
-				break;
-			}
-		}
-		return false;
-	}
+        switch (attackState) {
+        case RE::ATTACK_STATE_ENUM::kBowDrawn: {
+            if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kCrossbow) {
+                return true;
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+        return false;
+    }
 
-	static bool IsBowDrawNoZoomCheck(RE::PlayerCharacter* player, RE::PlayerCamera* playerCamera)
-	{
-		auto attackState = player->AsActorState()->GetAttackState();
+    static bool IsBowDrawNoZoomCheck(RE::PlayerCharacter* player, RE::PlayerCamera* playerCamera)
+    {
+        auto attackState = player->AsActorState()->GetAttackState();
 
-		if (playerCamera->GetRuntimeData2().bowZoomedIn) 
-		{
-			return false;
-		}
+        if (playerCamera->GetRuntimeData2().bowZoomedIn) {
+            return false;
+        }
 
-		auto equippedWeapon = skyrim_cast<RE::TESObjectWEAP*>(player->GetEquippedObject(false));
-		if (!equippedWeapon) {
-			return false;
-		}
+        auto equippedWeapon = skyrim_cast<RE::TESObjectWEAP*>(player->GetEquippedObject(false));
+        if (!equippedWeapon) {
+            return false;
+        }
 
-		switch (attackState) {
-		case RE::ATTACK_STATE_ENUM::kBowDrawn:
-			{
-				if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kBow) {
-					return true;
-				}
-				break;
-			}
-		case RE::ATTACK_STATE_ENUM::kBowAttached:
-			{
-				if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kBow) {
-					return true;
-				}
-				break;
-			}
-		default:
-			{
-				break;
-			}
-		}
-		return false;
-	}
+        switch (attackState) {
+        case RE::ATTACK_STATE_ENUM::kBowDrawn: {
+            if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kBow) {
+                return true;
+            }
+            break;
+        }
+        case RE::ATTACK_STATE_ENUM::kBowAttached: {
+            if (equippedWeapon->GetWeaponType() == RE::WEAPON_TYPE::kBow) {
+                return true;
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+        return false;
+    }
 };

@@ -153,7 +153,7 @@
 
 #include "SimpleIni.h"
 
-//Xbyak
+// Xbyak
 #include <xbyak/xbyak.h>
 
 #define DLLEXPORT __declspec(dllexport)
