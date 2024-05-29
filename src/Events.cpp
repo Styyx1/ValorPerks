@@ -49,16 +49,13 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                         bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                         if (sword || axe || mace) {
-                           
                             stam_cost = global;
                         }
                         else if (greatsword || greataxe) {
                             stam_cost = global * 1.5;
-                            
                         }
                         else if (dagger || wieldedWeap->IsHandToHandMelee()) {
                             stam_cost = global * 0.8;
-                            
                         }
                     }
                     else
@@ -75,16 +72,13 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                             bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                             if (sword || axe || mace) {
-                                
                                 stam_cost = npc_glob;
                             }
                             else if (greatsword || greataxe) {
                                 stam_cost = npc_glob * 1.5;
-                                
                             }
                             else if (dagger || wieldedWeap->IsHandToHandMelee()) {
                                 stam_cost = npc_glob * 0.8;
-                                
                             }
                         }
                         else
@@ -92,7 +86,6 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                     }
                 }
                 if (!Conditions::IsPowerAttacking(actor)) {
-                    
                     StaminaCost(actor, stam_cost);
                 }
             }
