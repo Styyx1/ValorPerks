@@ -152,7 +152,6 @@ public:
         return continueEvent;
     }
 
-
     static void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
     {
         auto settings = Settings::GetSingleton();
@@ -218,10 +217,9 @@ public:
     }
 };
 
-class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphEvent>    
+class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphEvent>
 {
 public:
-    
     static void InstallHook()
     {
         logger::info("Installing animation event hook...");
@@ -233,7 +231,6 @@ public:
     }
 
     inline static void StaminaCost(RE::Actor* actor, double cost);
-
 
     const char* jumpAnimEventString = "JumpUp";
     const char* HitString           = "HitFrame";
@@ -249,9 +246,9 @@ public:
         }
     }
 
-    static void Register() {InstallHook();}
+    static void Register() { InstallHook(); }
 
-    private:
+private:
     inline static void ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                     RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource);
 
@@ -262,8 +259,6 @@ public:
 
     inline static REL::Relocation<decltype(ProcessEvent_NPC)> _ProcessEvent_NPC;
     inline static REL::Relocation<decltype(ProcessEvent_PC)>  _ProcessEvent_PC;
-
-
 };
 
 class WeaponFireHandler

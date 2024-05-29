@@ -2,13 +2,13 @@
 
 inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cost)
 {
-        logger::info("stamina for attacks is {}", cost);
-        RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
-        if (actor == player && !player->IsGodMode()) {
-            actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
-        }
-        else
-            actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
+    logger::info("stamina for attacks is {}", cost);
+    RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
+    if (actor == player && !player->IsGodMode()) {
+        actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
+    }
+    else
+        actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
 }
 
 inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
@@ -99,7 +99,6 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
         }
     }
     return;
-
 }
 
 EventResult AnimationGraphEventHandler::ProcessEvent_NPC(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
@@ -115,7 +114,3 @@ EventResult AnimationGraphEventHandler::ProcessEvent_PC(RE::BSTEventSink<RE::BSA
     ProcessEvent(a_sink, a_event, a_eventSource);
     return _ProcessEvent_PC(a_sink, a_event, a_eventSource);
 }
-
-
-
-

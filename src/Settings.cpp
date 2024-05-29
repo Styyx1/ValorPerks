@@ -197,7 +197,7 @@ void Settings::LoadForms()
     }
     if (APOStaminaCostNPCGlobalFormID) {
         NPCStaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostNPCGlobalFormID, FileName));
-    } 
+    }
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
 
