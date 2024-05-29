@@ -49,16 +49,16 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                         bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                         if (sword || axe || mace) {
-                            logger::info("stamina cost is {} for sword, axe or mace", stam_cost);
+                           
                             stam_cost = global;
                         }
                         else if (greatsword || greataxe) {
                             stam_cost = global * 1.5;
-                            logger::info("stamina cost is {} for Greatsword, Greataxe or Greatmace", stam_cost);
+                            
                         }
                         else if (dagger || wieldedWeap->IsHandToHandMelee()) {
                             stam_cost = global * 0.8;
-                            logger::info("stamina cost is {} for dagger and unarmed", stam_cost);
+                            
                         }
                     }
                     else
@@ -75,16 +75,16 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                             bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                             if (sword || axe || mace) {
-                                logger::info("stamina cost is {} for sword, axe or mace", stam_cost);
+                                
                                 stam_cost = npc_glob;
                             }
                             else if (greatsword || greataxe) {
                                 stam_cost = npc_glob * 1.5;
-                                logger::info("stamina cost is {} for Greatsword, Greataxe or Greatmace", stam_cost);
+                                
                             }
                             else if (dagger || wieldedWeap->IsHandToHandMelee()) {
                                 stam_cost = npc_glob * 0.8;
-                                logger::info("stamina cost is {} for dagger and unarmed", stam_cost);
+                                
                             }
                         }
                         else
@@ -92,7 +92,7 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                     }
                 }
                 if (!Conditions::IsPowerAttacking(actor)) {
-                    logger::info("{} is attacking and it costs {} stamina", actor->GetName(), stam_cost);
+                    
                     StaminaCost(actor, stam_cost);
                 }
             }

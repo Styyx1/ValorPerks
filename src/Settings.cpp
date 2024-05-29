@@ -60,7 +60,7 @@ void Settings::LoadSettings()
         APOStaminaCostGlobalFormID = ParseFormID(staminaCostGlobalID);
     }
     if (!staminaCostNPCGlobalID.empty()) {
-        APOStaminaCostGlobalFormID = ParseFormID(staminaCostNPCGlobalID);
+        APOStaminaCostNPCGlobalFormID = ParseFormID(staminaCostNPCGlobalID);
     }
 
     if (!attackingSpellFormID.empty()) {
@@ -197,6 +197,7 @@ void Settings::LoadForms()
     }
     if (APOStaminaCostNPCGlobalFormID) {
         NPCStaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostNPCGlobalFormID, FileName));
+        logger::info("global {} found it is a value of {}", NPCStaminaCostGlobal->GetFormEditorID(), NPCStaminaCostGlobal->value);
     }
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
