@@ -23,7 +23,6 @@ public:
     RE::FormID BlockPerkFormId;
     RE::FormID BlockStaggerPerkFormId;
     RE::FormID DualWieldReplaceFormId;
-
     // new
     RE::FormID MAGParryControllerSpellID;
     RE::FormID MAGParryStaggerSpellFormID;
@@ -66,7 +65,6 @@ public:
     RE::BGSExplosion* APOSparksFlash;
     RE::BGSExplosion* APOSparksShieldFlash;
 
-    RE::TESGlobal* MAG_levelBasedDifficulty;
     RE::TESGlobal* StaminaCostGlobal;
 
     RE::EffectSetting* MAG_ParryWindowEffect;

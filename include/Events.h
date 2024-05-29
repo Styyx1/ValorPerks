@@ -47,7 +47,6 @@ public:
                             rightIsMeleeWeapon = true;
                         }
                     }
-
                     bool LeftIsMeleeWeaponOrNone = false;
                     auto leftHandForm            = causeActor->GetEquippedObject(true);
                     if (!leftHandForm || (leftHandForm->IsWeapon() && leftHandForm->As<RE::TESObjectWEAP>()->IsMelee()) || leftHandForm->IsArmor()) {
@@ -237,7 +236,9 @@ public:
         RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
         if (actor == player && !player->IsGodMode()) {
             actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
-        }                
+        }
+        else
+            actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
     }
 
     const char* jumpAnimEventString = "JumpUp";
@@ -259,14 +260,14 @@ public:
         if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
             if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
                 if (a_event->holder->As<RE::Actor>()) {
-                    auto                 actor       = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();
-                    RE::PlayerCharacter*   player    = Cache::GetPlayerSingleton();
+                    RE::PlayerCharacter* player = Cache::GetPlayerSingleton();                    
+                    auto                 actor       = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();                    
                     auto            wieldedWeap = Conditions::getWieldingWeapon(actor);
                     const Settings*      settings = Settings::GetSingleton();
                     RE::TESGlobal*         stamGlob    = settings->StaminaCostGlobal;
-                    auto                   global      = stamGlob->value;
-                    
+                    auto                   global      = stamGlob->value;                    
                     double                stam_cost = 10.0;
+
                     if (actor == player) {
                         if (wieldedWeap && wieldedWeap->IsWeapon()) {
                             bool dagger     = wieldedWeap->IsOneHandedDagger();
@@ -302,6 +303,20 @@ public:
                 }
             }
         }
+
+        if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>() && !a_event->holder->As<RE::Actor>()->IsPlayerRef()) {
+            if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
+                Settings* settings = Settings::GetSingleton();
+                logger::info("event plays for {}", a_event->holder->GetName());
+                auto av_owner = a_event->holder->As<RE::Actor>()->AsActorValueOwner();
+                double cost     = settings->StaminaCostGlobal->value;
+                const_cast<RE::TESObjectREFR*>(a_event->holder)
+                    ->As<RE::Actor>()
+                    ->AsActorValueOwner()
+                    ->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
+            }
+        }
+
         return RE::BSEventNotifyControl::kContinue;
     }
 
@@ -320,14 +335,24 @@ public:
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
-
+        auto       npc   = RE::TESForm::LookupByID<RE::Actor>(a_event->formID);
         const auto actor = RE::TESForm::LookupByID<RE::Actor>(a_event->formID);
-        if (!actor || !actor->IsPlayerRef()) {
+        if (!actor) {
             return RE::BSEventNotifyControl::kContinue;
         }
 
-        // Register for anim event
-        actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+        
+        if (actor && !actor->IsPlayerRef()) {
+            actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+            logger::info("registered {} for event", actor->GetName());
+        }
+        if (actor && actor->IsPlayerRef()) {
+            // Register for anim event
+            actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+            logger::info("registered {} for event", actor->GetName());
+        }
+
+        
 
         return RE::BSEventNotifyControl::kContinue;
     }

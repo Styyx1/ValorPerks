@@ -17,7 +17,6 @@ void Settings::LoadSettings()
     ini.LoadFile(R"(.\Data\SKSE\Plugins\ValorPerks.ini)");
 
     enableSneakStaminaCost = ini.GetBoolValue("", "bEnableSneakStaminaCost", true);
-    enableLevelDifficulty  = ini.GetBoolValue("", "bLevelBasedDifficulty", true);
     zeroAllWeapStagger     = ini.GetBoolValue("", "bZeroAllWeaponStagger", true);
     armorScalingEnabled    = ini.GetBoolValue("", "bArmorRatingScalingEnabled", true);
 
@@ -32,16 +31,13 @@ void Settings::LoadSettings()
     std::string bashPerkFormId((ini.GetValue("", "BashStaminaPerkFormId", "")));
     std::string blockPerkFormId((ini.GetValue("", "BlockStaminaPerkFormId", "")));
     std::string blockStaggerPerkFormId((ini.GetValue("", "BlockStaggerPerkFormId", "")));
-
     // new
-
     std::string parryControllerSpellID((ini.GetValue("", "MAGParryControllerSpellID", "")));
     std::string parryStaggerSpellID((ini.GetValue("", "MAGParryStaggerSpellFormID", "")));
     std::string BlockStaggerSpellID1((ini.GetValue("", "MAGBlockStaggerSpellFormID", "")));
     std::string BlockStaggerSpellID2((ini.GetValue("", "MAGBlockStaggerSpell2FormID", "")));
     std::string CrossbowStaminaDrainSpellID((ini.GetValue("", "MAGCrossbowStaminaDrainSpellFormID", "")));
     std::string parryWindowEffectID((ini.GetValue("", "MAG_ParryWindowEffectFormID", "")));
-    std::string levelBasedDifficultyID((ini.GetValue("", "MAG_levelBasedDifficultyFormID", "")));
     std::string apoParryBuffSpellID((ini.GetValue("", "ParryBuffSpellFormID", "")));
     std::string APOSparksNormalBlockID((ini.GetValue("", "NormalBlockSparksID", "")));
     std::string APOSparksPhysicsBlockID((ini.GetValue("", "PhysicBlockSparksID", "")));
@@ -134,7 +130,6 @@ void Settings::LoadSettings()
     if (!parryWindowEffectID.empty()) {
         MAG_ParryWindowEffectFormID = ParseFormID(parryWindowEffectID);
     }
-
     if (!apoParryBuffSpellID.empty()) {
         APOParryBuffSpellFormID = ParseFormID(apoParryBuffSpellID);
     }
@@ -192,14 +187,10 @@ void Settings::LoadForms()
     if (!file || file->compileIndex == 0xFF) {
         SKSE::stl::report_and_fail("Cannot find ValorPerks.esp. If you are on Skyrim 1.6.1130+, Engine Fixes' achievements enabler may be disabling all of your plugins."sv);
     }
-
     logger::info("Loading forms");
     if (APOStaminaCostGlobalFormID) {
         StaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostGlobalFormID, FileName));
-        logger::info("Global variable found. Global is {} with a value of {}", StaminaCostGlobal->GetFormEditorID(), StaminaCostGlobal->value);
-    }
-        
-
+    } 
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
 
@@ -272,10 +263,6 @@ void Settings::LoadForms()
     if (APOShieldFlashSparksFormID)
         APOSparksShieldFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOShieldFlashSparksFormID, FileName));
 
-    // Hardcoded loads
-    MAG_levelBasedDifficulty = dataHandler->LookupForm(RE::FormID(ParseFormID("0xD91")), FileName)->As<RE::TESGlobal>();
-    // APOSparks = dataHandler->LookupForm(RE::FormID(ParseFormID("0x18E3B")), FileName)->As<RE::BGSExplosion>();
-
     SetGlobalsAndGameSettings();
 
     auto isPowerAttacking                        = new RE::TESConditionItem;
@@ -291,8 +278,6 @@ void Settings::LoadForms()
 
 void Settings::SetGlobalsAndGameSettings()
 {
-    MAG_levelBasedDifficulty->value = enableLevelDifficulty;
-
     // Set fMaxArmorRating game setting
     auto gameSettings     = RE::GameSettingCollection::GetSingleton();
     auto maxRatingSetting = gameSettings->GetSetting("fMaxArmorRating");
