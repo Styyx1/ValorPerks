@@ -46,6 +46,7 @@ void Settings::LoadSettings()
     std::string jumpSpellID((ini.GetValue("", "JumpSpellID", "")));
     std::string powerAtkStopSpellID((ini.GetValue("", "PowerAttackStopSpellID", "")));
     std::string staminaCostGlobalID(ini.GetValue("", "APO_AttackStaminaCost", ""));
+    std::string staminaCostNPCGlobalID(ini.GetValue("", "APO_NPCAttackStaminaCost", ""));
 
     std::string fileName(ini.GetValue("", "sModFileName", ""));
 
@@ -57,6 +58,9 @@ void Settings::LoadSettings()
 
     if (!staminaCostGlobalID.empty()) {
         APOStaminaCostGlobalFormID = ParseFormID(staminaCostGlobalID);
+    }
+    if (!staminaCostNPCGlobalID.empty()) {
+        APOStaminaCostGlobalFormID = ParseFormID(staminaCostNPCGlobalID);
     }
 
     if (!attackingSpellFormID.empty()) {
@@ -190,6 +194,9 @@ void Settings::LoadForms()
     logger::info("Loading forms");
     if (APOStaminaCostGlobalFormID) {
         StaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostGlobalFormID, FileName));
+    }
+    if (APOStaminaCostNPCGlobalFormID) {
+        NPCStaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostNPCGlobalFormID, FileName));
     } 
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
