@@ -86,6 +86,24 @@ namespace Conditions
         return false;
     }
 
+    inline static RE::TESObjectWEAP* getWieldingWeapon(RE::Actor* a_actor)
+    {
+        auto weapon = a_actor->GetAttackingWeapon();
+        if (weapon) {
+            return weapon->object->As<RE::TESObjectWEAP>();
+        }
+        auto rhs = a_actor->GetEquippedObject(false);
+        if (rhs && rhs->IsWeapon()) {
+            return rhs->As<RE::TESObjectWEAP>();
+        }
+        auto lhs = a_actor->GetEquippedObject(true);
+        if (lhs && lhs->IsWeapon()) {
+            return lhs->As<RE::TESObjectWEAP>();
+        }
+        return nullptr;
+    }
+
+
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
     static bool IsPermanent(RE::MagicItem* item)

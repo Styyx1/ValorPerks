@@ -38,6 +38,7 @@ public:
     RE::FormID APOShieldFlashSparksFormID;
     RE::FormID APOJumpSpellFormID;
     RE::FormID APOPowerAttackStopSpellFormID;
+    RE::FormID APOStaminaCostGlobalFormID;
 
     RE::SpellItem* IsAttackingSpell;
     RE::SpellItem* IsBlockingSpell;
@@ -66,6 +67,7 @@ public:
     RE::BGSExplosion* APOSparksShieldFlash;
 
     RE::TESGlobal* MAG_levelBasedDifficulty;
+    RE::TESGlobal* StaminaCostGlobal;
 
     RE::EffectSetting* MAG_ParryWindowEffect;
 

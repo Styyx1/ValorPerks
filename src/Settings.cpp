@@ -49,6 +49,7 @@ void Settings::LoadSettings()
     std::string APOSparksShieldFlashID((ini.GetValue("", "ShieldFlashBlockSparksID", "")));
     std::string jumpSpellID((ini.GetValue("", "JumpSpellID", "")));
     std::string powerAtkStopSpellID((ini.GetValue("", "PowerAttackStopSpellID", "")));
+    std::string staminaCostGlobalID(ini.GetValue("", "APO_AttackStaminaCost", ""));
 
     std::string fileName(ini.GetValue("", "sModFileName", ""));
 
@@ -57,6 +58,10 @@ void Settings::LoadSettings()
 
     (bonusXP < 0.0 || bonusXP > 100.0) ? BonusXPPerLevel = 0.15f : BonusXPPerLevel = bonusXP;
     baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP;
+
+    if (!staminaCostGlobalID.empty()) {
+        APOStaminaCostGlobalFormID = ParseFormID(staminaCostGlobalID);
+    }
 
     if (!attackingSpellFormID.empty()) {
         IsAttackingSpellFormId = ParseFormID(attackingSpellFormID);
@@ -189,6 +194,12 @@ void Settings::LoadForms()
     }
 
     logger::info("Loading forms");
+    if (APOStaminaCostGlobalFormID) {
+        StaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostGlobalFormID, FileName));
+        logger::info("Global variable found. Global is {} with a value of {}", StaminaCostGlobal->GetFormEditorID(), StaminaCostGlobal->value);
+    }
+        
+
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
 
