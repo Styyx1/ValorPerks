@@ -190,7 +190,7 @@ void Settings::LoadForms()
     logger::info("Loading forms");
     if (APOStaminaCostGlobalFormID) {
         StaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostGlobalFormID, FileName));
-    } 
+    }
     if (IsBlockingSpellFormId)
         IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
 

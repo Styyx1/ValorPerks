@@ -1,7 +1,7 @@
 #pragma once
 #include <Conditions.h>
-#include <RecentHitEventData.h>
 #include <Hooks.h>
+#include <RecentHitEventData.h>
 
 class OnHitEventHandler : public RE::BSTEventSink<RE::TESHitEvent>
 {
@@ -142,10 +142,6 @@ public:
                     targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                     targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                 }
-                
-
-                
-                
 
                 recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
             }
@@ -242,7 +238,7 @@ public:
     }
 
     const char* jumpAnimEventString = "JumpUp";
-    const char* HitString        = "HitFrame";
+    const char* HitString           = "HitFrame";
 
     // Anims
     RE::BSEventNotifyControl ProcessEvent(const RE::BSAnimationGraphEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource) override
@@ -260,13 +256,13 @@ public:
         if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
             if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
                 if (a_event->holder->As<RE::Actor>()) {
-                    RE::PlayerCharacter* player = Cache::GetPlayerSingleton();                    
-                    auto                 actor       = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();                    
-                    auto            wieldedWeap = Conditions::getWieldingWeapon(actor);
-                    const Settings*      settings = Settings::GetSingleton();
-                    RE::TESGlobal*         stamGlob    = settings->StaminaCostGlobal;
-                    auto                   global      = stamGlob->value;                    
-                    double                stam_cost = 10.0;
+                    RE::PlayerCharacter* player      = Cache::GetPlayerSingleton();
+                    auto                 actor       = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();
+                    auto                 wieldedWeap = Conditions::getWieldingWeapon(actor);
+                    const Settings*      settings    = Settings::GetSingleton();
+                    RE::TESGlobal*       stamGlob    = settings->StaminaCostGlobal;
+                    auto                 global      = stamGlob->value;
+                    double               stam_cost   = 10.0;
 
                     if (actor == player) {
                         if (wieldedWeap && wieldedWeap->IsWeapon()) {
@@ -295,11 +291,11 @@ public:
                     }
                     else
                         stam_cost = 10.0;
-                                       
+
                     if (!Conditions::IsPowerAttacking(actor)) {
                         logger::info("{} is attacking and it costs {} stamina", actor->GetName(), stam_cost);
                         StaminaCost(actor, stam_cost);
-                    }                    
+                    }
                 }
             }
         }
@@ -308,7 +304,7 @@ public:
             if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
                 Settings* settings = Settings::GetSingleton();
                 logger::info("event plays for {}", a_event->holder->GetName());
-                auto av_owner = a_event->holder->As<RE::Actor>()->AsActorValueOwner();
+                auto   av_owner = a_event->holder->As<RE::Actor>()->AsActorValueOwner();
                 double cost     = settings->StaminaCostGlobal->value;
                 const_cast<RE::TESObjectREFR*>(a_event->holder)
                     ->As<RE::Actor>()
@@ -341,7 +337,6 @@ public:
             return RE::BSEventNotifyControl::kContinue;
         }
 
-        
         if (actor && !actor->IsPlayerRef()) {
             actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
             logger::info("registered {} for event", actor->GetName());
@@ -351,8 +346,6 @@ public:
             actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
             logger::info("registered {} for event", actor->GetName());
         }
-
-        
 
         return RE::BSEventNotifyControl::kContinue;
     }
