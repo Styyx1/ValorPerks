@@ -1,7 +1,7 @@
 #pragma once
 #include <Conditions.h>
-#include <RecentHitEventData.h>
 #include <Hooks.h>
+#include <RecentHitEventData.h>
 
 using EventResult = RE::BSEventNotifyControl;
 #define continueEvent RE::BSEventNotifyControl::kContinue;
@@ -236,7 +236,7 @@ public:
 
 
     const char* jumpAnimEventString = "JumpUp";
-    const char* HitString        = "HitFrame";
+    const char* HitString           = "HitFrame";
 
     // Anims
 

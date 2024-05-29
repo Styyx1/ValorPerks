@@ -86,8 +86,8 @@ namespace Conditions
         return false;
     }
 
-    //Credit: D7ry for getWieldingWeapon in ValhallaCombat
-    //https://github.com/D7ry/valhallaCombat/blob/48fb4c3b9bb6bbaa691ce41dbd33f096b74c07e3/src/include/Utils.cpp#L10
+    // Credit: D7ry for getWieldingWeapon in ValhallaCombat
+    // https://github.com/D7ry/valhallaCombat/blob/48fb4c3b9bb6bbaa691ce41dbd33f096b74c07e3/src/include/Utils.cpp#L10
     inline static RE::TESObjectWEAP* getWieldingWeapon(RE::Actor* a_actor)
     {
         auto weapon = a_actor->GetAttackingWeapon();
@@ -104,7 +104,6 @@ namespace Conditions
         }
         return nullptr;
     }
-
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
