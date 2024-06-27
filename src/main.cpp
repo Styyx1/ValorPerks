@@ -82,8 +82,6 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse)
         logger::error("Hook installation failed.");
         return false;
     }
-    /*AnimationGraphEventHandler::Register();
-	OnHitEventHandler::Register();*/
     PickpocketReplace::Install();
 
     auto messaging = SKSE::GetMessagingInterface();
