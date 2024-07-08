@@ -49,11 +49,11 @@ cmake -B build -S .
 ```
 
 # Credits
-This DLL is a fork of [colinswrath's](https://github.com/colinswrath) DLL for [Blade and Blunt](https://github.com/colinswrath/BladeAndBlunt) by SimonMagus. 
-A majority of the original RE work for Blade and Blunt was done by [KernalsEgg](https://github.com/KernalsEgg). 
-This DLL includes code from [dTry's](https://github.com/D7ry) DLL for [Valhalla Combat](https://github.com/D7ry/valhallaCombat) and [colinswrath's](https://github.com/colinswrath) DLL for [Hand to Hand](https://github.com/colinswrath/handtohand) by SimonMagus.
-[CharmedBaron](https://github.com/CharmedBaryon) for Commonlib-NG.
-[Alandtse](https://github.com/alandtse) for Clib-VR with NG branch.
+* This DLL is a fork of [colinswrath's](https://github.com/colinswrath) DLL for [Blade and Blunt](https://github.com/colinswrath/BladeAndBlunt) by SimonMagus. 
+* A majority of the original RE work for Blade and Blunt was done by [KernalsEgg](https://github.com/KernalsEgg). 
+* This DLL includes code from [dTry's](https://github.com/D7ry) DLL for [Valhalla Combat](https://github.com/D7ry/valhallaCombat) and [colinswrath's](https://github.com/colinswrath) DLL for [Hand to Hand](https://github.com/colinswrath/handtohand) by SimonMagus.
+* [CharmedBaron](https://github.com/CharmedBaryon) for Commonlib-NG.
+* [Alandtse](https://github.com/alandtse) for Clib-VR with NG branch.
 
 
 
