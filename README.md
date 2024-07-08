@@ -1,30 +1,30 @@
 # Features:
 
 **Adds specified spells in ini for the following scenarios:**  
-`IsAttacking`
-`IsBlocking`
-`IsSneaking`
-`IsSprinting` (including differentiation for Mounted)
-`IsCasting`
-`Spell when drawing bow`  
-`Spell when firing xbow`  
-`Spell when reloading xbow`  
-`IsJumping`
+- `IsAttacking`
+- `IsBlocking`
+- `IsSneaking`
+- `IsSprinting` (including differentiation for Mounted)
+- `IsCasting`
+- `Spell when drawing bow`  
+- `Spell when firing xbow`  
+- `Spell when reloading xbow`  
+- `IsJumping`
 
 **Includes engine fixes/changes for:**  
-`Movement speed for player scale`  
-`Block cap will use fBlockMax instead of fPlayerMaxResistance`  
-`Spell absorption cap will no longer exceed fPlayerMaxResistance` 
+- `Movement speed for player scale`  
+- `Block cap will use fBlockMax instead of fPlayerMaxResistance`  
+- `Spell absorption cap will no longer exceed fPlayerMaxResistance` 
 
 **Other features**  
-`Implements a new armor rating scaling formula`    
-`Overrides the Stamina cost of Blocking and Bashing`
-`Implements a Stamina Cost for light attacks` (Controlled by a global variable, one for player and one for NPCs)
-`Spawns Sparks on timed blocks/parries`
-`Applies a spell to aggressor upon a successful timed block/parry`
-`Redirects lockpicking XP to pickpocket`
-`Catches melee attacks while unarmed and redirects the XP to lockpicking`
-`Changes XP bar in lockpick menu to use pickpocket XP and level`
+- `Implements a new armor rating scaling formula`    
+- `Overrides the Stamina cost of Blocking and Bashing`
+- `Implements a Stamina Cost for light attacks` (Controlled by a global variable, one for player and one for NPCs)
+- `Spawns Sparks on timed blocks/parries`
+- `Applies a spell to aggressor upon a successful timed block/parry`
+- `Redirects lockpicking XP to pickpocket`
+- `Catches melee attacks while unarmed and redirects the XP to lockpicking`
+- `Changes XP bar in lockpick menu to use pickpocket XP and level`
 
 # Requirements
 * [CMake](https://cmake.org/)
