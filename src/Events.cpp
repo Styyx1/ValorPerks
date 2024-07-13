@@ -11,7 +11,6 @@ inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cos
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
 }
 
-
 inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                     RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
@@ -33,8 +32,7 @@ inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnima
 inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                      RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
-   
-    const char* HitString           = "HitFrame";
+    const char* HitString = "HitFrame";
 
     if (!a_event) {
         return;
@@ -53,7 +51,6 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                 double               stam_cost   = 10.0;
 
                 if (actor == player) {
-
                     if (wieldedWeap && wieldedWeap->IsWeapon() && wieldedWeap->IsMelee()) {
                         bool dagger     = wieldedWeap->IsOneHandedDagger();
                         bool sword      = wieldedWeap->IsOneHandedSword();
@@ -116,7 +113,7 @@ EventResult AnimationGraphEventHandler::ProcessEvent_NPC(RE::BSTEventSink<RE::BS
                                                          RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
     ProcessEvent(a_sink, a_event, a_eventSource);
-    //ProcessJump(a_sink, a_event, a_eventSource);
+    // ProcessJump(a_sink, a_event, a_eventSource);
     return _ProcessEvent_NPC(a_sink, a_event, a_eventSource);
 }
 
@@ -124,6 +121,6 @@ EventResult AnimationGraphEventHandler::ProcessEvent_PC(RE::BSTEventSink<RE::BSA
                                                         RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
     ProcessEvent(a_sink, a_event, a_eventSource);
-    //ProcessJump(a_sink, a_event, a_eventSource);
+    // ProcessJump(a_sink, a_event, a_eventSource);
     return _ProcessEvent_PC(a_sink, a_event, a_eventSource);
 }

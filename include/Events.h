@@ -222,8 +222,7 @@ class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphE
                                    public RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>
 {
 public:
-
-     static AnimationGraphEventHandler* GetSingleton()
+    static AnimationGraphEventHandler* GetSingleton()
     {
         static AnimationGraphEventHandler singleton;
         return &singleton;
@@ -263,7 +262,6 @@ public:
     // Anims
     RE::BSEventNotifyControl ProcessEvent(const RE::BSAnimationGraphEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource) override
     {
-
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
@@ -274,14 +272,14 @@ public:
                 if (a_event->holder && a_event->holder->As<RE::Actor>() && !IsInBeastRace()) {
                     HandleJumpAnim();
                     logger::info("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
-                }                
+                }
             }
         }
 
         return RE::BSEventNotifyControl::kContinue;
     }
 
-      // Object load
+    // Object load
     RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
     {
         if (!a_event) {
@@ -319,21 +317,15 @@ public:
         return RE::BSEventNotifyControl::kContinue;
     }
 
-
-
-    static void Register() {
-
+    static void Register()
+    {
         // Register for load event, then in the load event register for anims
         RE::ScriptEventSourceHolder* eventHolder = RE::ScriptEventSourceHolder::GetSingleton();
         eventHolder->AddEventSink<RE::TESObjectLoadedEvent>(GetSingleton());
         eventHolder->AddEventSink<RE::TESSwitchRaceCompleteEvent>(GetSingleton());
-
     }
 
     static void RegisterAnimHook() { InstallHook(); }
-
-   
-
 
 private:
     inline static void ProcessJump(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
