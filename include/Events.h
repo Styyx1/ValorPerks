@@ -217,9 +217,18 @@ public:
     }
 };
 
-class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphEvent>
+class AnimationGraphEventHandler : public RE::BSTEventSink<RE::BSAnimationGraphEvent>,
+                                   public RE::BSTEventSink<RE::TESObjectLoadedEvent>,
+                                   public RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>
 {
 public:
+
+     static AnimationGraphEventHandler* GetSingleton()
+    {
+        static AnimationGraphEventHandler singleton;
+        return &singleton;
+    }
+
     static void InstallHook()
     {
         logger::info("Installing animation event hook...");
@@ -233,9 +242,14 @@ public:
     inline static void StaminaCost(RE::Actor* actor, double cost);
 
     const char* jumpAnimEventString = "JumpUp";
-    const char* HitString           = "HitFrame";
 
     // Anims
+
+    static bool IsInBeastRace()
+    {
+        RE::MenuControls* MenuControls = RE::MenuControls::GetSingleton();
+        return MenuControls->InBeastForm();
+    }
 
     static void HandleJumpAnim()
     {
@@ -246,9 +260,85 @@ public:
         }
     }
 
-    static void Register() { InstallHook(); }
+    // Anims
+    RE::BSEventNotifyControl ProcessEvent(const RE::BSAnimationGraphEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource) override
+    {
+
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
+            logger::info("event is {}", a_event->tag.c_str());
+            if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
+                if (a_event->holder && a_event->holder->As<RE::Actor>() && !IsInBeastRace()) {
+                    HandleJumpAnim();
+                    logger::info("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
+                }                
+            }
+        }
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+      // Object load
+    RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
+    {
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        const auto actor = RE::TESForm::LookupByID<RE::Actor>(a_event->formID);
+        if (!actor || !actor->IsPlayerRef()) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        // Register for anim event
+        actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+    // Race Switch
+    RE::BSEventNotifyControl ProcessEvent(const RE::TESSwitchRaceCompleteEvent*                                a_event,
+                                          [[maybe_unused]] RE::BSTEventSource<RE::TESSwitchRaceCompleteEvent>* a_eventSource) override
+    {
+        if (!a_event) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        const auto actor = a_event->subject->As<RE::Actor>();
+        if (!actor || !actor->IsPlayerRef()) {
+            return RE::BSEventNotifyControl::kContinue;
+        }
+
+        // Register for anim event
+        actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
+        logger::info("added animation graph");
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+
+
+    static void Register() {
+
+        // Register for load event, then in the load event register for anims
+        RE::ScriptEventSourceHolder* eventHolder = RE::ScriptEventSourceHolder::GetSingleton();
+        eventHolder->AddEventSink<RE::TESObjectLoadedEvent>(GetSingleton());
+        eventHolder->AddEventSink<RE::TESSwitchRaceCompleteEvent>(GetSingleton());
+
+    }
+
+    static void RegisterAnimHook() { InstallHook(); }
+
+   
+
 
 private:
+    inline static void ProcessJump(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
+                                   RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource);
+
     inline static void ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                     RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource);
 

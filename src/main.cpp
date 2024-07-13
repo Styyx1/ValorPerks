@@ -48,6 +48,7 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
             settings->AdjustWeaponStaggerVals();
         }
         AnimationGraphEventHandler::Register();
+        AnimationGraphEventHandler::RegisterAnimHook();
         OnHitEventHandler::Register();
 
         break;

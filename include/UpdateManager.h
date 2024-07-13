@@ -48,12 +48,6 @@ private:
                 if (settings->XbowStaminaSpell)
                     player->RemoveSpell(settings->XbowStaminaSpell);
 
-                if (settings->IsAttackingSpell)
-                    player->RemoveSpell(settings->IsAttackingSpell);
-
-                if (settings->IsBlockingSpell)
-                    player->RemoveSpell(settings->IsBlockingSpell);
-
                 if (settings->IsSneakingSpell)
                     player->RemoveSpell(settings->IsSneakingSpell);
 
