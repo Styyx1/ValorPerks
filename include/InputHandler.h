@@ -1,11 +1,10 @@
 #pragma once
-#include "Settings.h"
+#include "CLib/Key.h"
 #include "Cache.h"
 #include "Conditions.h"
-#include "CLib/Key.h"
+#include "Settings.h"
 
 #define continueEvent RE::BSEventNotifyControl::kContinue
-
 
 namespace Input
 {
@@ -23,8 +22,9 @@ namespace Input
         using Event       = RE::InputEvent*;
         using EventSource = RE::BSTEventSource<Event>;
 
-        inline static bool key_active{ false };
-        inline static std::uint32_t      blockKey[RE::INPUT_DEVICE::kFlatTotal] = {0xFF, 0xFF, 0xFF};
+        inline static bool          key_active{ false };
+        inline static std::uint32_t blockKey[RE::INPUT_DEVICE::kFlatTotal] = { 0xFF, 0xFF, 0xFF };
+
         static void Register()
         {
             if (auto manager = RE::BSInputDeviceManager::GetSingleton()) {
@@ -50,21 +50,22 @@ namespace Input
             }
         }
 
-        void GetMappedKey(){
-            const RE::ControlMap* cm = RE::ControlMap::GetSingleton();
+        void GetMappedKey()
+        {
+            const RE::ControlMap* cm        = RE::ControlMap::GetSingleton();
             const RE::UserEvents* userEvent = RE::UserEvents::GetSingleton();
-            Settings*       settings  = Settings::GetSingleton();
-            
+            Settings*             settings  = Settings::GetSingleton();
+
             for (int i = RE::INPUT_DEVICE::kKeyboard; i <= RE::INPUT_DEVICE::kGamepad; ++i) {
                 switch (i) {
-                case RE::INPUT_DEVICE::kKeyboard :
+                case RE::INPUT_DEVICE::kKeyboard:
                     blockKey[i] = cm->GetMappedKey(userEvent->leftAttack, RE::INPUT_DEVICE::kKeyboard);
                     logger::debug("____GET MAPPED KEY____ KeyCode for keyboard block is {}", blockKey[i]);
                     settings->blockKeyKeyboard = blockKey[RE::INPUT_DEVICE::kKeyboard];
                     logger::debug("____GET MAPPED KEY____ KeyCode for chached keyboard block is {}", settings->blockKeyKeyboard);
                     break;
                 case RE::INPUT_DEVICE::kMouse:
-                    blockKey[i]          = SKSE::InputMap::kMacro_MouseButtonOffset + cm->GetMappedKey(userEvent->leftAttack, RE::INPUT_DEVICE::kMouse);
+                    blockKey[i] = SKSE::InputMap::kMacro_MouseButtonOffset + cm->GetMappedKey(userEvent->leftAttack, RE::INPUT_DEVICE::kMouse);
                     logger::debug("____GET MAPPED KEY____ KeyCode for mouse block is {}", blockKey[i]);
                     settings->blockKeyMouse = blockKey[RE::INPUT_DEVICE::kMouse];
                     logger::debug("____GET MAPPED KEY____ KeyCode for chached keyboard block is {}", settings->blockKeyMouse);
@@ -96,7 +97,6 @@ namespace Input
 
         inline static bool updating{ false };
 
-
         RE::BSEventNotifyControl ProcessEvent(const Event* a_event, [[maybe_unused]] EventSource*)
         {
             if (!a_event || !RE::Main::GetSingleton()->gameActive) {
@@ -112,12 +112,4 @@ namespace Input
         InputEventSink() = default;
     };
 
-
-}
-
-
-
-
-
-
-    
+} // namespace Input

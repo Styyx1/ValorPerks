@@ -1,8 +1,8 @@
 #include "Cache.h"
 #include "Events.h"
 #include "Hooks.h"
-#include "PickpocketReplace.h"
 #include "InputHandler.h"
+#include "PickpocketReplace.h"
 
 void InitLogger()
 {
@@ -53,7 +53,6 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
         OnHitEventHandler::Register();
         Input::InputEventSink::Register();
         Input::InputEventSink::GetSingleton()->GetMappedKey();
-        
 
         break;
     }
