@@ -271,6 +271,9 @@ void Settings::LoadForms()
     if (APOShieldFlashSparksFormID)
         APOSparksShieldFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOShieldFlashSparksFormID, FileName));
 
+    DualBlockKey = dataHandler->LookupForm(0x10C0DB, FileName)->As<RE::TESGlobal>();
+    logger::info("Global variable found. Global is {} with a value of {}", DualBlockKey->GetFormEditorID(), DualBlockKey->value);
+
     SetGlobalsAndGameSettings();
 
     auto isPowerAttacking                        = new RE::TESConditionItem;
@@ -289,6 +292,9 @@ void Settings::SetGlobalsAndGameSettings()
     // Set fMaxArmorRating game setting
     auto gameSettings     = RE::GameSettingCollection::GetSingleton();
     auto maxRatingSetting = gameSettings->GetSetting("fMaxArmorRating");
+    auto blockangle       = gameSettings->GetSetting("fCombatHitConeAngle")->GetFloat();
+
+    blockAngleSetting = blockangle;
 
     if (armorScalingEnabled) {
         logger::info("Setting max armor rating to 90");

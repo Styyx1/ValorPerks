@@ -2,6 +2,7 @@
 #include <Conditions.h>
 #include <Hooks.h>
 #include <RecentHitEventData.h>
+#include <InputHandler.h>
 
 using EventResult = RE::BSEventNotifyControl;
 #define continueEvent RE::BSEventNotifyControl::kContinue;
@@ -23,6 +24,29 @@ public:
         REL::Relocation<std::uint32_t*> runtime{ RELOCATION_ID(523662, 410201) };
         return *runtime;
     }
+
+    inline static void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
+    {
+        logger::debug("processHitEvent For Parry started");
+        auto settings = Settings::GetSingleton();
+        if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
+            logger::debug("condition is true");
+            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
+            Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
+            target->PlaceObjectAtMe(settings->APOSparksFlash, false);
+        }
+    }
+
+    inline static void ProcessHitEventForParryShield(RE::Actor* target, RE::Actor* aggressor)
+    {
+        auto settings = Settings::GetSingleton();
+        if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
+            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
+            Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
+            target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
+        }
+    }
+
 
     EventResult ProcessEvent(const RE::TESHitEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESHitEvent>* a_eventSource) override
     {
@@ -78,7 +102,7 @@ public:
                 }
 
                 // Shield Parry (different hit explosion effects)
-                if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
+                if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor)) {
                     auto settings = Settings::GetSingleton();
                     targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                     targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
@@ -131,20 +155,19 @@ public:
                 bool blockedMeleeHit = false;
                 if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
                     blockedMeleeHit = true;
-                }
-
-                // Shield Parry (different hit explosion effects)
-                if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
-                    auto settings = Settings::GetSingleton();
-                    targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                    targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
-                }
-                else if (blockedMeleeHit) {
-                    // Weapon Parry
-                    auto settings = Settings::GetSingleton();
-                    targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                    targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
-                }
+                    // Shield Parry (different hit explosion effects)
+                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
+                        auto settings = Settings::GetSingleton();
+                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
+                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
+                    }
+                    else if (blockedMeleeHit) {
+                        // Weapon Parry
+                        auto settings = Settings::GetSingleton();
+                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
+                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
+                    }
+                }               
 
                 recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
             }
@@ -152,25 +175,7 @@ public:
         return continueEvent;
     }
 
-    static void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
-    {
-        auto settings = Settings::GetSingleton();
-        if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
-            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
-            Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-            target->PlaceObjectAtMe(settings->APOSparksFlash, false);
-        }
-    }
-
-    static void ProcessHitEventForParryShield(RE::Actor* target, RE::Actor* aggressor)
-    {
-        auto settings = Settings::GetSingleton();
-        if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
-            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
-            Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-            target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
-        }
-    }
+    
 
     inline static void ApplyHandToHandXP()
     {
@@ -241,6 +246,17 @@ public:
 
     inline static void StaminaCost(RE::Actor* actor, double cost);
 
+
+
+    static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
+    {
+        Settings*                  settings                = Settings::GetSingleton();
+        float     fCombatHitConeAngle = settings->blockAngleSetting;
+
+        auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
+        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
+    }
+
     const char* jumpAnimEventString = "JumpUp";
 
     // Anims
@@ -269,11 +285,11 @@ public:
         }
 
         if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
-            logger::info("event is {}", a_event->tag.c_str());
+            //logger::debug("event is {}", a_event->tag.c_str());
             if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
                 if (a_event->holder && a_event->holder->As<RE::Actor>() && !IsInBeastRace()) {
                     HandleJumpAnim();
-                    logger::info("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
+                    logger::debug("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
                 }                
             }
         }
@@ -284,6 +300,8 @@ public:
       // Object load
     RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
     {
+        bool inputLoaded = false;
+
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
@@ -303,6 +321,8 @@ public:
     RE::BSEventNotifyControl ProcessEvent(const RE::TESSwitchRaceCompleteEvent*                                a_event,
                                           [[maybe_unused]] RE::BSTEventSource<RE::TESSwitchRaceCompleteEvent>* a_eventSource) override
     {
+
+
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
@@ -314,7 +334,8 @@ public:
 
         // Register for anim event
         actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
-        logger::info("added animation graph");
+        logger::debug("added animation graph");
+
 
         return RE::BSEventNotifyControl::kContinue;
     }

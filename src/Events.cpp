@@ -2,7 +2,7 @@
 
 inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cost)
 {
-    logger::info("stamina for attacks is {}", cost);
+    //logger::debug("stamina for attacks is {}", cost);
     RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
     if (actor == player && !player->IsGodMode()) {
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
@@ -10,6 +10,8 @@ inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cos
     else
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
 }
+
+
 
 
 inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
@@ -33,8 +35,10 @@ inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnima
 inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                      RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
-   
-    const char* HitString           = "HitFrame";
+    const char* HitString = "HitFrame";
+
+    auto graph    = AnimationGraphEventHandler::GetSingleton();
+    auto settings = Settings::GetSingleton();
 
     if (!a_event) {
         return;
@@ -51,6 +55,7 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                 auto                 global      = stamGlob->value;
                 auto                 npc_glob    = settings->NPCStaminaCostGlobal->value;
                 double               stam_cost   = 10.0;
+                double               dual_wield_mod = 1.2;
 
                 if (actor == player) {
 

@@ -68,6 +68,7 @@ public:
 
     RE::TESGlobal* StaminaCostGlobal;
     RE::TESGlobal* NPCStaminaCostGlobal;
+    RE::TESGlobal* DualBlockKey;
 
     RE::EffectSetting* MAG_ParryWindowEffect;
 
@@ -84,6 +85,12 @@ public:
     bool                wasPowerAttacking = false;
     inline static float BonusXPPerLevel;
     inline static float BaseXP;
+    inline static float blockAngleSetting;
+    inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = {0xFF,0xFF,0xFF};
+
+    inline static uint32_t blockKeyMouse{ 0xFF };
+    inline static uint32_t blockKeyKeyboard{ 0xFF };
+    inline static uint32_t blockKeyGamePad{ 0xFF };
 
     int maxFrameCheck = 6;
 

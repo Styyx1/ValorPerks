@@ -90,20 +90,39 @@ namespace Conditions
     // https://github.com/D7ry/valhallaCombat/blob/48fb4c3b9bb6bbaa691ce41dbd33f096b74c07e3/src/include/Utils.cpp#L10
     inline static RE::TESObjectWEAP* getWieldingWeapon(RE::Actor* a_actor)
     {
+        bool dual_wielding = false;
         auto weapon = a_actor->GetAttackingWeapon();
         if (weapon) {
+            dual_wielding = false;
             return weapon->object->As<RE::TESObjectWEAP>();
         }
         auto rhs = a_actor->GetEquippedObject(false);
         if (rhs && rhs->IsWeapon()) {
+            dual_wielding = false;
             return rhs->As<RE::TESObjectWEAP>();
         }
         auto lhs = a_actor->GetEquippedObject(true);
         if (lhs && lhs->IsWeapon()) {
+            dual_wielding = false;
             return lhs->As<RE::TESObjectWEAP>();
+        }
+        if (lhs && rhs && lhs->IsWeapon() && rhs->IsWeapon()) {
+            logger::info("is dual wielding");
+            dual_wielding = true;
+            return lhs->As<RE::TESObjectWEAP>(), rhs->As<RE::TESObjectWEAP>();
         }
         return nullptr;
     }
+
+    static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
+    {
+        Settings* settings            = Settings::GetSingleton();
+        float     fCombatHitConeAngle = settings->blockAngleSetting;
+
+        auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
+        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
+    }
+
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions

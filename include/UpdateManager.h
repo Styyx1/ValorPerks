@@ -112,7 +112,7 @@ private:
                             // Parry setup
                             if ((!leftHand || leftHand->IsWeapon() || leftHand->IsArmor()) && !settings->IsBlockingWeaponSpellCasted) {
                                 settings->IsBlockingWeaponSpellCasted = true;
-                                Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
+                                //Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
                             }
 
                             if (!HasSpell(player, settings->IsBlockingSpell)) {

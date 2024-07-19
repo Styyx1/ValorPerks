@@ -2,6 +2,7 @@
 #include "Events.h"
 #include "Hooks.h"
 #include "PickpocketReplace.h"
+#include "InputHandler.h"
 
 void InitLogger()
 {
@@ -50,6 +51,9 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
         AnimationGraphEventHandler::Register();
         AnimationGraphEventHandler::RegisterAnimHook();
         OnHitEventHandler::Register();
+        Input::InputEventSink::Register();
+        Input::InputEventSink::GetSingleton()->GetMappedKey();
+        
 
         break;
     }
