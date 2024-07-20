@@ -123,7 +123,7 @@ namespace Conditions
             return false;
     }
 
-    static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
+    inline static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
     {
         Settings* settings            = Settings::GetSingleton();
         float     fCombatHitConeAngle = settings->blockAngleSetting;
