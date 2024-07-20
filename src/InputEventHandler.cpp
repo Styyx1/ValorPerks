@@ -5,14 +5,6 @@ namespace
     class HotkeyContext
     {
     public:
-        inline static std::string logBool(bool& bool_to_log)
-        {
-            if (bool_to_log)
-                return "true";
-            if (!bool_to_log)
-                return "false";
-        }
-
         explicit HotkeyContext(const Settings* settings)
             : hotkeyDual(settings->DualBlockKey->value), hotkey(settings->blockKeyKeyboard), hotkeyMouse(settings->blockKeyMouse), hotkeyGamepad(settings->blockKeyGamePad)
         {
@@ -78,7 +70,6 @@ void Input::HotkeyManager::Process(const RE::InputEvent* const* a_event)
             ctx.Update(button);
         }
     }
-
     auto app = Input::InputEventSink::GetSingleton();
 
     ctx.Finalize(app);

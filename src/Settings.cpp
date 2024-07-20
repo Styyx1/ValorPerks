@@ -63,19 +63,9 @@ void Settings::AdjustWeaponStaggerVals()
     }
 }
 
-void Settings::LoadForms()
+void Settings::GetIngameData() //hard coded FormIDs to keep the ini file simpler for users
 {
     auto dataHandler = RE::TESDataHandler::GetSingleton();
-
-    auto file = dataHandler->LookupLoadedModByName(FileName);
-    ;
-
-    if (!file || file->compileIndex == 0xFF) {
-        SKSE::stl::report_and_fail("Cannot find ValorPerks.esp. If you are on Skyrim 1.6.1130+, Engine Fixes' achievements enabler may be disabling all of your plugins."sv);
-    }
-    logger::info("Loading forms");
-
-    // change to hardcoded form loading:
 
     // Globals:
     StaminaCostGlobal    = dataHandler->LookupForm(0x0EDA69, FileName)->As<RE::TESGlobal>();
@@ -113,7 +103,19 @@ void Settings::LoadForms()
     APOSparksFlash       = dataHandler->LookupForm(0x18E3D, FileName)->As<RE::BGSExplosion>();
     APOSparksPhysics     = dataHandler->LookupForm(0x18E3C, FileName)->As<RE::BGSExplosion>();
     APOSparks            = dataHandler->LookupForm(0x18E3B, FileName)->As<RE::BGSExplosion>();
+}
 
+void Settings::LoadForms()
+{
+    auto dataHandler = RE::TESDataHandler::GetSingleton();
+    auto file = dataHandler->LookupLoadedModByName(FileName);
+
+    if (!file || file->compileIndex == 0xFF) {
+        SKSE::stl::report_and_fail("Cannot find ValorPerks.esp."sv);
+    }
+    logger::info("Loading forms");
+
+    GetIngameData();
     SetGlobalsAndGameSettings();
 
     auto isPowerAttacking                        = new RE::TESConditionItem;

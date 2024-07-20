@@ -8,38 +8,9 @@ public:
     void LoadSettings();
     void LoadForms();
     void AdjustWeaponStaggerVals();
-
+    void GetIngameData();
     void SetGlobalsAndGameSettings();
-
-    RE::FormID IsAttackingSpellFormId;
-    RE::FormID IsBlockingSpellFormId;
-    RE::FormID IsSneakingSpellFormId;
-    RE::FormID IsSprintingSpellFormId;
-    RE::FormID MountSprintingSpellFormId;
-    RE::FormID IsCastingSpellFormId;
-    RE::FormID BowDrainStaminaFormId;
-    RE::FormID XbowDrainStaminaFormId;
-    RE::FormID BashPerkFormId;
-    RE::FormID BlockPerkFormId;
-    RE::FormID BlockStaggerPerkFormId;
-    RE::FormID DualWieldReplaceFormId;
-    // new
-    RE::FormID MAGParryControllerSpellID;
-    RE::FormID MAGParryStaggerSpellFormID;
-    RE::FormID MAGBlockStaggerSpellFormID;
-    RE::FormID MAGBlockStaggerSpell2FormID;
-    RE::FormID MAGCrossbowStaminaDrainSpellFormID;
-    RE::FormID MAG_ParryWindowEffectFormID;
-    RE::FormID APOParryBuffSpellFormID;
-    RE::FormID APONormalBlockSparksFormID;
-    RE::FormID APOPhysicBlockSparksFormID;
-    RE::FormID APOFlashSparksFormID;
-    RE::FormID APOShieldFlashSparksFormID;
-    RE::FormID APOJumpSpellFormID;
-    RE::FormID APOPowerAttackStopSpellFormID;
-    RE::FormID APOStaminaCostGlobalFormID;
-    RE::FormID APOStaminaCostNPCGlobalFormID;
-
+    //Spells
     RE::SpellItem* IsAttackingSpell;
     RE::SpellItem* IsBlockingSpell;
     RE::SpellItem* IsSneakingSpell;
@@ -56,44 +27,41 @@ public:
     RE::SpellItem* APOParryBuffSPell;
     RE::SpellItem* jumpSpell;
     RE::SpellItem* PowerAttackStopSpell;
-
+    //Perks
     RE::BGSPerk* BashStaminaPerk;
     RE::BGSPerk* BlockStaminaPerk;
     RE::BGSPerk* BlockStaggerPerk;
-
+    //Explosions (Sparks)
     RE::BGSExplosion* APOSparks;
     RE::BGSExplosion* APOSparksPhysics;
     RE::BGSExplosion* APOSparksFlash;
     RE::BGSExplosion* APOSparksShieldFlash;
-
+    //Globals
     RE::TESGlobal* StaminaCostGlobal;
     RE::TESGlobal* NPCStaminaCostGlobal;
     RE::TESGlobal* DualBlockKey;
-
+    //Effects
     RE::EffectSetting* MAG_ParryWindowEffect;
-
+    //Conditions
     RE::TESCondition* IsPowerAttacking;
-
+    //bools
     bool enableSneakStaminaCost;
     bool enableLevelDifficulty;
-
     bool zeroAllWeapStagger;
     bool armorScalingEnabled;
-
     bool IsBlockingWeaponSpellCasted = false;
-
     bool                   wasPowerAttacking = false;
+    inline static bool debug_logging{};
+    //floats
     inline static float    BonusXPPerLevel;
     inline static float    BaseXP;
     float                  blockAngleSetting;
+    //int
     inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = { 0xFF, 0xFF, 0xFF };
-
     inline static uint32_t blockKeyMouse{ 0xFF };
     inline static uint32_t blockKeyKeyboard{ 0xFF };
     inline static uint32_t blockKeyGamePad{ 0xFF };
-
-    int                maxFrameCheck = 6;
-    inline static bool debug_logging{};
+    int                maxFrameCheck = 6;    
 
     static RE::FormID ParseFormID(const std::string& str);
 
