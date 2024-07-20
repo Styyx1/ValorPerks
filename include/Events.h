@@ -33,6 +33,10 @@ public:
             logger::debug("condition is true");
             Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
+            target->RemoveSpell(settings->MAGParryControllerSpell);
+            if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
+                logger::debug("spell got removed but effect remained");
+            }
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
         }
     }
@@ -43,6 +47,10 @@ public:
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
             Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
+            target->RemoveSpell(settings->MAGParryControllerSpell);
+            if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
+                logger::debug("spell got removed but effect remained");
+            }
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }
     }
@@ -102,13 +110,13 @@ public:
                 }
 
                 // Shield Parry (different hit explosion effects)
-                if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor)) {
+                if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
                     auto settings = Settings::GetSingleton();
                     targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                     targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     ProcessHitEventForParryShield(targetActor, causeActor);
                 }
-                else if (blockedMeleeHit) {
+                else if (blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
                     // Weapon Parry
                     auto settings = Settings::GetSingleton();
                     targetActor->PlaceObjectAtMe(settings->APOSparks, false);
@@ -154,14 +162,15 @@ public:
 
                 bool blockedMeleeHit = false;
                 if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
+                    auto settings   = Settings::GetSingleton();
                     blockedMeleeHit = true;
                     // Shield Parry (different hit explosion effects)
-                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
-                        auto settings = Settings::GetSingleton();
+                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
+                        
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
-                    else if (blockedMeleeHit) {
+                    else if (blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
                         // Weapon Parry
                         auto settings = Settings::GetSingleton();
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);

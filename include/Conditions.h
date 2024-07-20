@@ -106,12 +106,22 @@ namespace Conditions
             dual_wielding = false;
             return lhs->As<RE::TESObjectWEAP>();
         }
-        if (lhs && rhs && lhs->IsWeapon() && rhs->IsWeapon()) {
-            logger::info("is dual wielding");
-            dual_wielding = true;
-            return lhs->As<RE::TESObjectWEAP>(), rhs->As<RE::TESObjectWEAP>();
-        }
+        
         return nullptr;
+    }
+
+    inline static bool IsDualWielding(RE::Actor* a_actor)
+    {
+        auto weapon = a_actor->GetAttackingWeapon();
+        auto rhs    = a_actor->GetEquippedObject(false);
+        auto lhs    = a_actor->GetEquippedObject(true);
+        if (rhs && lhs && lhs->IsWeapon() && rhs->IsWeapon()) {
+            logger::debug("dual wielding is active");
+            return true;
+        }
+        else
+            return false;
+
     }
 
     static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)

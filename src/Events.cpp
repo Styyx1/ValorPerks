@@ -6,6 +6,7 @@ inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cos
     RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
     if (actor == player && !player->IsGodMode()) {
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
+        logger::debug("attacks costs {} stamina", cost);
     }
     else
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
@@ -67,21 +68,28 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                         bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                         if (sword || axe || mace) {
-                            stam_cost = global;
+                            if (Conditions::IsDualWielding(actor)) {
+                                stam_cost = global * dual_wield_mod;
+                            }
+                            else
+                                stam_cost = global;
                         }
                         else if (greatsword || greataxe) {
                             stam_cost = global * 1.5;
                         }
                         else if (dagger || wieldedWeap->IsHandToHandMelee()) {
-                            stam_cost = global * 0.8;
+                                if (dagger && Conditions::IsDualWielding(actor)) {
+                                stam_cost = global * 0.8 * dual_wield_mod;
+                                }
+                                else
+                                    stam_cost = global * 0.8;
                         }
+                        
                     }
                     if (player->IsGodMode()) {
                         stam_cost = 0.0;
                     }
 
-                    else
-                        stam_cost = global * 0.8;
                 }
                 else {
                     if (actor != player) {
@@ -94,17 +102,21 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                             bool greataxe   = wieldedWeap->IsTwoHandedAxe();
 
                             if (sword || axe || mace) {
+                                if (Conditions::IsDualWielding(actor)) {
+                                    stam_cost = npc_glob * dual_wield_mod;
+                                }
                                 stam_cost = npc_glob;
                             }
                             else if (greatsword || greataxe) {
                                 stam_cost = npc_glob * 1.5;
                             }
                             else if (dagger || wieldedWeap->IsHandToHandMelee()) {
+                                if (dagger && Conditions::IsDualWielding(actor)) {
+                                    stam_cost = npc_glob * 0.8 * dual_wield_mod;
+                                }
                                 stam_cost = npc_glob * 0.8;
                             }
                         }
-                        else
-                            stam_cost = npc_glob * 0.8;
                     }
                 }
                 if (!Conditions::IsPowerAttacking(actor)) {

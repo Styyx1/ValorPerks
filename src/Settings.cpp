@@ -19,138 +19,22 @@ void Settings::LoadSettings()
     enableSneakStaminaCost = ini.GetBoolValue("", "bEnableSneakStaminaCost", true);
     zeroAllWeapStagger     = ini.GetBoolValue("", "bZeroAllWeaponStagger", true);
     armorScalingEnabled    = ini.GetBoolValue("", "bArmorRatingScalingEnabled", true);
-
-    std::string attackingSpellFormID((ini.GetValue("", "IsAttackingSpellFormId", "")));
-    std::string blockingSpellFormID((ini.GetValue("", "IsBlockingSpellFormId", "")));
-    std::string sneakingSpellFormID((ini.GetValue("", "IsSneakingSpellFormId", "")));
-    std::string sprintingSpellFormId((ini.GetValue("", "IsSprintingSpellFormId", "")));
-    std::string mountSprintingSpellFormId((ini.GetValue("", "MountSprintingSpellFormId", "")));
-    std::string bowStaminaSpellFormID((ini.GetValue("", "BowStaminaSpellFormId", "")));
-    std::string xbowStaminaSpellFormID((ini.GetValue("", "XbowStaminaSpellFormId", "")));
-    std::string IsCastingFormId((ini.GetValue("", "IsCastingSpellFormId", "")));
-    std::string bashPerkFormId((ini.GetValue("", "BashStaminaPerkFormId", "")));
-    std::string blockPerkFormId((ini.GetValue("", "BlockStaminaPerkFormId", "")));
-    std::string blockStaggerPerkFormId((ini.GetValue("", "BlockStaggerPerkFormId", "")));
-    // new
-    std::string parryControllerSpellID((ini.GetValue("", "MAGParryControllerSpellID", "")));
-    std::string parryStaggerSpellID((ini.GetValue("", "MAGParryStaggerSpellFormID", "")));
-    std::string BlockStaggerSpellID1((ini.GetValue("", "MAGBlockStaggerSpellFormID", "")));
-    std::string BlockStaggerSpellID2((ini.GetValue("", "MAGBlockStaggerSpell2FormID", "")));
-    std::string CrossbowStaminaDrainSpellID((ini.GetValue("", "MAGCrossbowStaminaDrainSpellFormID", "")));
-    std::string parryWindowEffectID((ini.GetValue("", "MAG_ParryWindowEffectFormID", "")));
-    std::string apoParryBuffSpellID((ini.GetValue("", "ParryBuffSpellFormID", "")));
-    std::string APOSparksNormalBlockID((ini.GetValue("", "NormalBlockSparksID", "")));
-    std::string APOSparksPhysicsBlockID((ini.GetValue("", "PhysicBlockSparksID", "")));
-    std::string APOSparksFlashID((ini.GetValue("", "FlashBlockSparksID", "")));
-    std::string APOSparksShieldFlashID((ini.GetValue("", "ShieldFlashBlockSparksID", "")));
-    std::string jumpSpellID((ini.GetValue("", "JumpSpellID", "")));
-    std::string powerAtkStopSpellID((ini.GetValue("", "PowerAttackStopSpellID", "")));
-    std::string staminaCostGlobalID(ini.GetValue("", "APO_AttackStaminaCost", ""));
-    std::string staminaCostNPCGlobalID(ini.GetValue("", "APO_NPCAttackStaminaCost", ""));
-
-    std::string fileName(ini.GetValue("", "sModFileName", ""));
+    debug_logging          = ini.GetBoolValue("", "Debug");
 
     auto bonusXP = (float)ini.GetDoubleValue("", "fBonusXPPerLevel", 0.15);
     auto baseXP  = (float)ini.GetDoubleValue("", "fBaseXPHerHit", 3.0);
 
     (bonusXP < 0.0 || bonusXP > 100.0) ? BonusXPPerLevel = 0.15f : BonusXPPerLevel = bonusXP;
-    baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP;
+    baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP; 
+    
 
-    if (!staminaCostGlobalID.empty()) {
-        APOStaminaCostGlobalFormID = ParseFormID(staminaCostGlobalID);
-    }
-    if (!staminaCostNPCGlobalID.empty()) {
-        APOStaminaCostNPCGlobalFormID = ParseFormID(staminaCostNPCGlobalID);
-    }
+    FileName = "ValorPerks.esp";
 
-    if (!attackingSpellFormID.empty()) {
-        IsAttackingSpellFormId = ParseFormID(attackingSpellFormID);
-    }
+    if (debug_logging) {
+        spdlog::get("Global")->set_level(spdlog::level::level_enum::debug);
+        logger::debug("Debug logging enabled");
+    };
 
-    if (!powerAtkStopSpellID.empty()) {
-        APOPowerAttackStopSpellFormID = ParseFormID(powerAtkStopSpellID);
-    }
-
-    if (!jumpSpellID.empty()) {
-        APOJumpSpellFormID = ParseFormID(jumpSpellID);
-    }
-
-    if (!blockingSpellFormID.empty()) {
-        IsBlockingSpellFormId = ParseFormID(blockingSpellFormID);
-    }
-
-    if (!sneakingSpellFormID.empty()) {
-        IsSneakingSpellFormId = ParseFormID(sneakingSpellFormID);
-    }
-
-    if (!sprintingSpellFormId.empty()) {
-        IsSprintingSpellFormId = ParseFormID(sprintingSpellFormId);
-    }
-
-    if (!mountSprintingSpellFormId.empty()) {
-        MountSprintingSpellFormId = ParseFormID(mountSprintingSpellFormId);
-    }
-
-    if (!bowStaminaSpellFormID.empty()) {
-        BowDrainStaminaFormId = ParseFormID(bowStaminaSpellFormID);
-    }
-
-    if (!xbowStaminaSpellFormID.empty()) {
-        XbowDrainStaminaFormId = ParseFormID(xbowStaminaSpellFormID);
-    }
-
-    if (!IsCastingFormId.empty()) {
-        IsCastingSpellFormId = ParseFormID(IsCastingFormId);
-    }
-
-    if (!bashPerkFormId.empty()) {
-        BashPerkFormId = ParseFormID(bashPerkFormId);
-    }
-
-    if (!blockPerkFormId.empty()) {
-        BlockPerkFormId = ParseFormID(blockPerkFormId);
-    }
-
-    if (!blockStaggerPerkFormId.empty()) {
-        BlockStaggerPerkFormId = ParseFormID(blockStaggerPerkFormId);
-    }
-    // new
-
-    if (!parryControllerSpellID.empty()) {
-        MAGParryControllerSpellID = ParseFormID(parryControllerSpellID);
-    }
-    if (!parryStaggerSpellID.empty()) {
-        MAGParryStaggerSpellFormID = ParseFormID(parryStaggerSpellID);
-    }
-    if (!BlockStaggerSpellID1.empty()) {
-        MAGBlockStaggerSpellFormID = ParseFormID(BlockStaggerSpellID1);
-    }
-    if (!BlockStaggerSpellID2.empty()) {
-        MAGBlockStaggerSpell2FormID = ParseFormID(BlockStaggerSpellID2);
-    }
-    if (!CrossbowStaminaDrainSpellID.empty()) {
-        MAGCrossbowStaminaDrainSpellFormID = ParseFormID(CrossbowStaminaDrainSpellID);
-    }
-    if (!parryWindowEffectID.empty()) {
-        MAG_ParryWindowEffectFormID = ParseFormID(parryWindowEffectID);
-    }
-    if (!apoParryBuffSpellID.empty()) {
-        APOParryBuffSpellFormID = ParseFormID(apoParryBuffSpellID);
-    }
-    if (!APOSparksNormalBlockID.empty()) {
-        APONormalBlockSparksFormID = ParseFormID(APOSparksNormalBlockID);
-    }
-    if (!APOSparksPhysicsBlockID.empty()) {
-        APOPhysicBlockSparksFormID = ParseFormID(APOSparksPhysicsBlockID);
-    }
-    if (!APOSparksFlashID.empty()) {
-        APOFlashSparksFormID = ParseFormID(APOSparksFlashID);
-    }
-    if (!APOSparksShieldFlashID.empty()) {
-        APOShieldFlashSparksFormID = ParseFormID(APOSparksShieldFlashID);
-    }
-
-    FileName = fileName;
 }
 
 RE::FormID Settings::ParseFormID(const std::string& str)
@@ -191,88 +75,46 @@ void Settings::LoadForms()
     if (!file || file->compileIndex == 0xFF) {
         SKSE::stl::report_and_fail("Cannot find ValorPerks.esp. If you are on Skyrim 1.6.1130+, Engine Fixes' achievements enabler may be disabling all of your plugins."sv);
     }
-    logger::info("Loading forms");
-    if (APOStaminaCostGlobalFormID) {
-        StaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostGlobalFormID, FileName));
-    }
-    if (APOStaminaCostNPCGlobalFormID) {
-        NPCStaminaCostGlobal = skyrim_cast<RE::TESGlobal*>(dataHandler->LookupForm(APOStaminaCostNPCGlobalFormID, FileName));
-        logger::info("global {} found it is a value of {}", NPCStaminaCostGlobal->GetFormEditorID(), NPCStaminaCostGlobal->value);
-    }
-    if (IsBlockingSpellFormId)
-        IsBlockingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsBlockingSpellFormId, FileName));
+    logger::info("Loading forms");    
 
-    if (APOPowerAttackStopSpellFormID)
-        PowerAttackStopSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOPowerAttackStopSpellFormID, FileName));
+    //change to hardcoded form loading:
 
-    if (APOJumpSpellFormID)
-        jumpSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOJumpSpellFormID, FileName));
-
-    if (IsAttackingSpellFormId)
-        IsAttackingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsAttackingSpellFormId, FileName));
-
-    if (IsSneakingSpellFormId)
-        IsSneakingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsSneakingSpellFormId, FileName));
-
-    if (IsSprintingSpellFormId)
-        IsSprintingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsSprintingSpellFormId, FileName));
-
-    if (MountSprintingSpellFormId)
-        MountSprintingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MountSprintingSpellFormId, FileName));
-
-    if (BowDrainStaminaFormId)
-        BowStaminaSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(BowDrainStaminaFormId, FileName));
-
-    if (XbowDrainStaminaFormId)
-        XbowStaminaSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(XbowDrainStaminaFormId, FileName));
-
-    if (IsCastingSpellFormId)
-        IsCastingSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(IsCastingSpellFormId, FileName));
-
-    if (BashPerkFormId)
-        BashStaminaPerk = dataHandler->LookupForm(BashPerkFormId, "Update.esm")->As<RE::BGSPerk>();
-
-    if (BlockPerkFormId)
-        BlockStaminaPerk = dataHandler->LookupForm(BlockPerkFormId, "Update.esm")->As<RE::BGSPerk>();
-
-    if (BlockStaggerPerkFormId)
-        BlockStaggerPerk = dataHandler->LookupForm(BlockStaggerPerkFormId, "Update.esm")->As<RE::BGSPerk>();
-
-    if (MAGParryControllerSpellID)
-        MAGParryControllerSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MAGParryControllerSpellID, FileName));
-
-    if (MAGParryStaggerSpellFormID)
-        MAGParryStaggerSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MAGParryStaggerSpellFormID, FileName));
-
-    if (MAGBlockStaggerSpellFormID)
-        MAGBlockStaggerSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MAGBlockStaggerSpellFormID, FileName));
-
-    if (MAGBlockStaggerSpell2FormID)
-        MAGBlockStaggerSpell2 = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MAGBlockStaggerSpell2FormID, FileName));
-
-    if (MAGCrossbowStaminaDrainSpellFormID)
-        MAGCrossbowStaminaDrainSpell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(MAGCrossbowStaminaDrainSpellFormID, FileName));
-
-    if (MAG_ParryWindowEffectFormID)
-        MAG_ParryWindowEffect = skyrim_cast<RE::EffectSetting*>(dataHandler->LookupForm(MAG_ParryWindowEffectFormID, FileName));
-
-    if (APOParryBuffSpellFormID)
-        APOParryBuffSPell = skyrim_cast<RE::SpellItem*>(dataHandler->LookupForm(APOParryBuffSpellFormID, FileName));
-
-    if (APONormalBlockSparksFormID)
-        APOSparks = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APONormalBlockSparksFormID, FileName));
-
-    if (APOPhysicBlockSparksFormID)
-        APOSparksPhysics = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOPhysicBlockSparksFormID, FileName));
-
-    if (APOFlashSparksFormID)
-        APOSparksFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOFlashSparksFormID, FileName));
-
-    if (APOShieldFlashSparksFormID)
-        APOSparksShieldFlash = skyrim_cast<RE::BGSExplosion*>(dataHandler->LookupForm(APOShieldFlashSparksFormID, FileName));
-
+    // Globals:
+    StaminaCostGlobal    = dataHandler->LookupForm(0x0EDA69, FileName)->As<RE::TESGlobal>();
+    NPCStaminaCostGlobal = dataHandler->LookupForm(0x0EDA6A, FileName)->As<RE::TESGlobal>();
     DualBlockKey = dataHandler->LookupForm(0x10C0DB, FileName)->As<RE::TESGlobal>();
-    logger::info("Global variable found. Global is {} with a value of {}", DualBlockKey->GetFormEditorID(), DualBlockKey->value);
+
+    // Perks:
+    BashStaminaPerk  = dataHandler->LookupForm(0xADA510, "Update.esm")->As<RE::BGSPerk>();
+    BlockStaminaPerk = dataHandler->LookupForm(0xADA509, "Update.esm")->As<RE::BGSPerk>();
+    BlockStaggerPerk = dataHandler->LookupForm(0xADA511, "Update.esm")->As<RE::BGSPerk>();
+
+    // Effects:
+    MAG_ParryWindowEffect = dataHandler->LookupForm(0x000D9E, FileName)->As<RE::EffectSetting>();
+
+    //Spells:
+    IsBlockingSpell              = dataHandler->LookupForm(0x000DAC, FileName)->As<RE::SpellItem>();
+    PowerAttackStopSpell         = dataHandler->LookupForm(0x0E8932, FileName)->As<RE::SpellItem>();
+    jumpSpell                    = dataHandler->LookupForm(0x0E892F, FileName)->As<RE::SpellItem>();
+    IsAttackingSpell             = dataHandler->LookupForm(0x000DA9, FileName)->As<RE::SpellItem>();
+    IsSneakingSpell              = dataHandler->LookupForm(0x000DB4, FileName)->As<RE::SpellItem>();
+    IsSprintingSpell             = dataHandler->LookupForm(0x000DB6, FileName)->As<RE::SpellItem>();
+    MountSprintingSpell          = dataHandler->LookupForm(0x000DB1, FileName)->As<RE::SpellItem>();
+    BowStaminaSpell              = dataHandler->LookupForm(0x000DAE, FileName)->As<RE::SpellItem>();
+    XbowStaminaSpell             = dataHandler->LookupForm(0x000DB0, FileName)->As<RE::SpellItem>();
+    IsCastingSpell               = dataHandler->LookupForm(0x000DB5, FileName)->As<RE::SpellItem>();
+    MAGParryControllerSpell      = dataHandler->LookupForm(0x000DB2, FileName)->As<RE::SpellItem>();
+    MAGParryStaggerSpell         = dataHandler->LookupForm(0x000DB3, FileName)->As<RE::SpellItem>();
+    APOParryBuffSPell            = dataHandler->LookupForm(0x23040, FileName)->As<RE::SpellItem>();
+    MAGCrossbowStaminaDrainSpell = dataHandler->LookupForm(0x000DAF, FileName)->As<RE::SpellItem>();
+    MAGBlockStaggerSpell         = dataHandler->LookupForm(0x000DAA, FileName)->As<RE::SpellItem>();
+    MAGBlockStaggerSpell2        = dataHandler->LookupForm(0x000DAB, FileName)->As<RE::SpellItem>();
+
+    //Explosions:
+    APOSparksShieldFlash = dataHandler->LookupForm(0x18E3E, FileName)->As<RE::BGSExplosion>();
+    APOSparksFlash       = dataHandler->LookupForm(0x18E3D, FileName)->As<RE::BGSExplosion>();
+    APOSparksPhysics     = dataHandler->LookupForm(0x18E3C, FileName)->As<RE::BGSExplosion>();
+    APOSparks            = dataHandler->LookupForm(0x18E3B, FileName)->As<RE::BGSExplosion>();
 
     SetGlobalsAndGameSettings();
 
