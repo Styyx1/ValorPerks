@@ -2,7 +2,7 @@
 
 inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cost)
 {
-    //logger::debug("stamina for attacks is {}", cost);
+    // logger::debug("stamina for attacks is {}", cost);
     RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
     if (actor == player && !player->IsGodMode()) {
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
@@ -11,9 +11,6 @@ inline void AnimationGraphEventHandler::StaminaCost(RE::Actor* actor, double cos
     else
         actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, cost * -1.0);
 }
-
-
-
 
 inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                     RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
@@ -48,14 +45,14 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
     if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
         if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
             if (a_event->holder->As<RE::Actor>()) {
-                RE::PlayerCharacter* player      = Cache::GetPlayerSingleton();
-                auto                 actor       = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();
-                auto                 wieldedWeap = Conditions::getWieldingWeapon(actor);
-                const Settings*      settings    = Settings::GetSingleton();
-                RE::TESGlobal*       stamGlob    = settings->StaminaCostGlobal;
-                auto                 global      = stamGlob->value;
-                auto                 npc_glob    = settings->NPCStaminaCostGlobal->value;
-                double               stam_cost   = 10.0;
+                RE::PlayerCharacter* player         = Cache::GetPlayerSingleton();
+                auto                 actor          = const_cast<RE::TESObjectREFR*>(a_event->holder)->As<RE::Actor>();
+                auto                 wieldedWeap    = Conditions::getWieldingWeapon(actor);
+                const Settings*      settings       = Settings::GetSingleton();
+                RE::TESGlobal*       stamGlob       = settings->StaminaCostGlobal;
+                auto                 global         = stamGlob->value;
+                auto                 npc_glob       = settings->NPCStaminaCostGlobal->value;
+                double               stam_cost      = 10.0;
                 double               dual_wield_mod = 1.2;
 
                 if (actor == player) {

@@ -82,11 +82,11 @@ public:
 
     bool IsBlockingWeaponSpellCasted = false;
 
-    bool                wasPowerAttacking = false;
-    inline static float BonusXPPerLevel;
-    inline static float BaseXP;
-    inline static float blockAngleSetting;
-    inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = {0xFF,0xFF,0xFF};
+    bool                   wasPowerAttacking = false;
+    inline static float    BonusXPPerLevel;
+    inline static float    BaseXP;
+    inline static float    blockAngleSetting;
+    inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = { 0xFF, 0xFF, 0xFF };
 
     inline static uint32_t blockKeyMouse{ 0xFF };
     inline static uint32_t blockKeyKeyboard{ 0xFF };

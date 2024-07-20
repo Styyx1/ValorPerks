@@ -31,14 +31,13 @@ namespace
                 hotkeyDual.Update(key);
                 hotkeyGamepad.Update(key);
                 hotkeyMouse.Update(key);
-
             }
         }
 
         void Finalize(Input::InputEventSink* app)
         {
-            RE::PlayerCharacter* player           = Cache::GetPlayerSingleton();
-            const Settings* settings         = Settings::GetSingleton();
+            RE::PlayerCharacter* player   = Cache::GetPlayerSingleton();
+            const Settings*      settings = Settings::GetSingleton();
             for (std::uint32_t count = 2; count > 0; --count) {
                 bool done = false;
                 if (hotkeyMouse.IsActive() && !Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
@@ -52,7 +51,7 @@ namespace
                     Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
                     logger::debug("PARRY SPELL APPLIED");
                     done = true;
-                }                
+                }
 
                 if (done) {
                     break;

@@ -1,8 +1,8 @@
 #pragma once
 #include <Conditions.h>
 #include <Hooks.h>
-#include <RecentHitEventData.h>
 #include <InputHandler.h>
+#include <RecentHitEventData.h>
 
 using EventResult = RE::BSEventNotifyControl;
 #define continueEvent RE::BSEventNotifyControl::kContinue;
@@ -54,7 +54,6 @@ public:
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }
     }
-
 
     EventResult ProcessEvent(const RE::TESHitEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESHitEvent>* a_eventSource) override
     {
@@ -176,15 +175,13 @@ public:
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
-                }               
+                }
 
                 recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
             }
         }
         return continueEvent;
     }
-
-    
 
     inline static void ApplyHandToHandXP()
     {
@@ -254,11 +251,9 @@ public:
 
     inline static void StaminaCost(RE::Actor* actor, double cost);
 
-
-
     static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
     {
-        Settings*                  settings                = Settings::GetSingleton();
+        Settings* settings            = Settings::GetSingleton();
         float     fCombatHitConeAngle = settings->blockAngleSetting;
 
         auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
@@ -292,12 +287,12 @@ public:
         }
 
         if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
-            //logger::debug("event is {}", a_event->tag.c_str());
+            // logger::debug("event is {}", a_event->tag.c_str());
             if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
                 if (a_event->holder && a_event->holder->As<RE::Actor>() && !IsInBeastRace()) {
                     HandleJumpAnim();
                     logger::debug("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
-                }                
+                }
             }
         }
 
@@ -328,8 +323,6 @@ public:
     RE::BSEventNotifyControl ProcessEvent(const RE::TESSwitchRaceCompleteEvent*                                a_event,
                                           [[maybe_unused]] RE::BSTEventSource<RE::TESSwitchRaceCompleteEvent>* a_eventSource) override
     {
-
-
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
@@ -342,7 +335,6 @@ public:
         // Register for anim event
         actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
         logger::debug("added animation graph");
-
 
         return RE::BSEventNotifyControl::kContinue;
     }

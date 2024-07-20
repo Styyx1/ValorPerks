@@ -1,9 +1,9 @@
 #include "Cache.h"
 #include "Events.h"
 #include "Hooks.h"
-#include "PickpocketReplace.h"
 #include "InputHandler.h"
 #include "MenuEventHandler.h"
+#include "PickpocketReplace.h"
 
 void InitLogger()
 {

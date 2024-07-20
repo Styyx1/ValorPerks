@@ -91,7 +91,7 @@ namespace Conditions
     inline static RE::TESObjectWEAP* getWieldingWeapon(RE::Actor* a_actor)
     {
         bool dual_wielding = false;
-        auto weapon = a_actor->GetAttackingWeapon();
+        auto weapon        = a_actor->GetAttackingWeapon();
         if (weapon) {
             dual_wielding = false;
             return weapon->object->As<RE::TESObjectWEAP>();
@@ -132,7 +132,6 @@ namespace Conditions
         auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
         return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
     }
-
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
