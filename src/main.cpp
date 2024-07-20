@@ -56,8 +56,6 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
         Input::InputEventSink::GetSingleton()->GetMappedKey();
         MenuEventHandler::MenuEvent::GetSingleton()->RegisterMenuEvents();
 
-        
-
         break;
     }
 }

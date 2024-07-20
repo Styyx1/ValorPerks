@@ -165,7 +165,6 @@ public:
                     blockedMeleeHit = true;
                     // Shield Parry (different hit explosion effects)
                     if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
-                        
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }

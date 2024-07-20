@@ -2,9 +2,9 @@
 
 RE::BSEventNotifyControl MenuEventHandler::MenuEvent::ProcessEvent(const RE::MenuOpenCloseEvent* event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*)
 {
-    auto menu     = MenuEventHandler::MenuEvent::GetSingleton();
+    auto menu         = MenuEventHandler::MenuEvent::GetSingleton();
     auto input_event  = Input::InputEventSink::GetSingleton();
-    auto journal_menu        = RE::JournalMenu::MENU_NAME;
+    auto journal_menu = RE::JournalMenu::MENU_NAME;
 
     if (!event) {
         return RE::BSEventNotifyControl::kContinue;

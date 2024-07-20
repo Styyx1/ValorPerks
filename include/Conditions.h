@@ -106,7 +106,7 @@ namespace Conditions
             dual_wielding = false;
             return lhs->As<RE::TESObjectWEAP>();
         }
-        
+
         return nullptr;
     }
 
@@ -121,7 +121,6 @@ namespace Conditions
         }
         else
             return false;
-
     }
 
     static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
