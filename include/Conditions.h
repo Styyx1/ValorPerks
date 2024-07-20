@@ -131,7 +131,7 @@ namespace Conditions
         logger::debug("block angle is {}", fCombatHitConeAngle);
         auto angle = blocker->GetHeadingAngle(a_obj->GetPosition(), false);
         logger::debug("actual angle is {}", angle);
-        return (angle  <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
+        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
     }
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent

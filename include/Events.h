@@ -91,7 +91,7 @@ public:
                         powerAttackMelee = true;
                     }
                 }
-                auto defender        = a_event->target->As<RE::Actor>();
+                auto defender = a_event->target->As<RE::Actor>();
                 if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && a_event->cause->IsPlayerRef() && !IsBeastRace()
                     && attackingWeapon->IsHandToHandMelee())
                 {
@@ -153,14 +153,14 @@ public:
                 }
 
                 bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) || targetActor->IsBlocking();
-                auto leftHand = targetActor->GetEquippedObject(true);
+                auto leftHand   = targetActor->GetEquippedObject(true);
 
                 bool blockedMeleeHit = false;
                 if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
-                    const Settings* settings   = Settings::GetSingleton();
-                    blockedMeleeHit = true;
+                    const Settings* settings = Settings::GetSingleton();
+                    blockedMeleeHit          = true;
                     // Shield Parry (different hit explosion effects)
-                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {    
+                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
@@ -296,7 +296,6 @@ public:
     // Object load
     RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
     {
-
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;
         }
