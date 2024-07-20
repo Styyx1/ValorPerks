@@ -70,7 +70,7 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                             stam_cost = global * 1.5;
                         }
                         else if (dagger || wieldedWeap->IsHandToHandMelee()) {
-                                if (dagger && Conditions::IsDualWielding(actor)) {
+                            if (dagger && Conditions::IsDualWielding(actor)) {
                                 stam_cost = global * 0.8 * dual_wield_mod;
                                 }
                                 else

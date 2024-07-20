@@ -25,8 +25,7 @@ void Settings::LoadSettings()
     auto baseXP  = (float)ini.GetDoubleValue("", "fBaseXPHerHit", 3.0);
 
     (bonusXP < 0.0 || bonusXP > 100.0) ? BonusXPPerLevel = 0.15f : BonusXPPerLevel = bonusXP;
-    baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP; 
-    
+    baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP;
 
     FileName = "ValorPerks.esp";
 
@@ -34,7 +33,6 @@ void Settings::LoadSettings()
         spdlog::get("Global")->set_level(spdlog::level::level_enum::debug);
         logger::debug("Debug logging enabled");
     };
-
 }
 
 RE::FormID Settings::ParseFormID(const std::string& str)
@@ -75,14 +73,14 @@ void Settings::LoadForms()
     if (!file || file->compileIndex == 0xFF) {
         SKSE::stl::report_and_fail("Cannot find ValorPerks.esp. If you are on Skyrim 1.6.1130+, Engine Fixes' achievements enabler may be disabling all of your plugins."sv);
     }
-    logger::info("Loading forms");    
+    logger::info("Loading forms");
 
-    //change to hardcoded form loading:
+    // change to hardcoded form loading:
 
     // Globals:
     StaminaCostGlobal    = dataHandler->LookupForm(0x0EDA69, FileName)->As<RE::TESGlobal>();
     NPCStaminaCostGlobal = dataHandler->LookupForm(0x0EDA6A, FileName)->As<RE::TESGlobal>();
-    DualBlockKey = dataHandler->LookupForm(0x10C0DB, FileName)->As<RE::TESGlobal>();
+    DualBlockKey         = dataHandler->LookupForm(0x10C0DB, FileName)->As<RE::TESGlobal>();
 
     // Perks:
     BashStaminaPerk  = dataHandler->LookupForm(0xADA510, "Update.esm")->As<RE::BGSPerk>();
@@ -92,7 +90,7 @@ void Settings::LoadForms()
     // Effects:
     MAG_ParryWindowEffect = dataHandler->LookupForm(0x000D9E, FileName)->As<RE::EffectSetting>();
 
-    //Spells:
+    // Spells:
     IsBlockingSpell              = dataHandler->LookupForm(0x000DAC, FileName)->As<RE::SpellItem>();
     PowerAttackStopSpell         = dataHandler->LookupForm(0x0E8932, FileName)->As<RE::SpellItem>();
     jumpSpell                    = dataHandler->LookupForm(0x0E892F, FileName)->As<RE::SpellItem>();
@@ -110,7 +108,7 @@ void Settings::LoadForms()
     MAGBlockStaggerSpell         = dataHandler->LookupForm(0x000DAA, FileName)->As<RE::SpellItem>();
     MAGBlockStaggerSpell2        = dataHandler->LookupForm(0x000DAB, FileName)->As<RE::SpellItem>();
 
-    //Explosions:
+    // Explosions:
     APOSparksShieldFlash = dataHandler->LookupForm(0x18E3E, FileName)->As<RE::BGSExplosion>();
     APOSparksFlash       = dataHandler->LookupForm(0x18E3D, FileName)->As<RE::BGSExplosion>();
     APOSparksPhysics     = dataHandler->LookupForm(0x18E3C, FileName)->As<RE::BGSExplosion>();

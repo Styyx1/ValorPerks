@@ -27,4 +27,4 @@ namespace MenuEventHandler
             }
         }
     };
-}
+} // namespace MenuEventHandler
