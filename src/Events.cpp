@@ -20,13 +20,11 @@ inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnima
     if (!a_event) {
         return;
     }
-
     if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
         if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
             HandleJumpAnim();
         }
     }
-
     return;
 };
 
@@ -34,9 +32,6 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                                                      RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
     const char* HitString = "HitFrame";
-
-    auto graph    = AnimationGraphEventHandler::GetSingleton();
-    auto settings = Settings::GetSingleton();
 
     if (!a_event) {
         return;
@@ -80,13 +75,11 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                                 }
                                 else
                                     stam_cost = global * 0.8;
-                        }
-                        
+                        }                        
                     }
                     if (player->IsGodMode()) {
                         stam_cost = 0.0;
                     }
-
                 }
                 else {
                     if (actor != player) {
@@ -129,7 +122,6 @@ EventResult AnimationGraphEventHandler::ProcessEvent_NPC(RE::BSTEventSink<RE::BS
                                                          RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
     ProcessEvent(a_sink, a_event, a_eventSource);
-    // ProcessJump(a_sink, a_event, a_eventSource);
     return _ProcessEvent_NPC(a_sink, a_event, a_eventSource);
 }
 
@@ -137,6 +129,5 @@ EventResult AnimationGraphEventHandler::ProcessEvent_PC(RE::BSTEventSink<RE::BSA
                                                         RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
     ProcessEvent(a_sink, a_event, a_eventSource);
-    // ProcessJump(a_sink, a_event, a_eventSource);
     return _ProcessEvent_PC(a_sink, a_event, a_eventSource);
 }

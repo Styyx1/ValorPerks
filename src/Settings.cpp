@@ -126,6 +126,9 @@ void Settings::LoadForms()
     isPowerAttackingCond->head = isPowerAttacking;
     IsPowerAttacking           = isPowerAttackingCond;
 
+    auto gameSettings = RE::GameSettingCollection::GetSingleton();
+    blockAngleSetting = gameSettings->GetSetting("fCombatHitConeAngle")->GetFloat();
+
     logger::info("All Forms loaded");
 }
 
@@ -134,9 +137,6 @@ void Settings::SetGlobalsAndGameSettings()
     // Set fMaxArmorRating game setting
     auto gameSettings     = RE::GameSettingCollection::GetSingleton();
     auto maxRatingSetting = gameSettings->GetSetting("fMaxArmorRating");
-    auto blockangle       = gameSettings->GetSetting("fCombatHitConeAngle")->GetFloat();
-
-    blockAngleSetting = blockangle;
 
     if (armorScalingEnabled) {
         logger::info("Setting max armor rating to 90");

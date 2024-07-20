@@ -92,9 +92,6 @@ public:
                     }
                 }
                 auto defender        = a_event->target->As<RE::Actor>();
-                auto defenderProcess = defender->GetActorRuntimeData().currentProcess;
-                auto player          = a_event->cause->As<RE::Actor>();
-                auto playerAttkData  = player->GetActorRuntimeData().currentProcess->high->attackData;
                 if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && a_event->cause->IsPlayerRef() && !IsBeastRace()
                     && attackingWeapon->IsHandToHandMelee())
                 {
@@ -156,22 +153,19 @@ public:
                 }
 
                 bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) || targetActor->IsBlocking();
-
                 auto leftHand = targetActor->GetEquippedObject(true);
 
                 bool blockedMeleeHit = false;
                 if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
-                    auto settings   = Settings::GetSingleton();
+                    const Settings* settings   = Settings::GetSingleton();
                     blockedMeleeHit = true;
                     // Shield Parry (different hit explosion effects)
-                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
-                        
+                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {    
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
                     else if (blockedMeleeHit && Conditions::isInBlockAngle(targetActor, causeActor->AsReference())) {
                         // Weapon Parry
-                        auto settings = Settings::GetSingleton();
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
@@ -302,7 +296,6 @@ public:
     // Object load
     RE::BSEventNotifyControl ProcessEvent(const RE::TESObjectLoadedEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESObjectLoadedEvent>* a_eventSource) override
     {
-        bool inputLoaded = false;
 
         if (!a_event) {
             return RE::BSEventNotifyControl::kContinue;

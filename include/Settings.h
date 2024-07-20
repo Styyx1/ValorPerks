@@ -85,7 +85,7 @@ public:
     bool                   wasPowerAttacking = false;
     inline static float    BonusXPPerLevel;
     inline static float    BaseXP;
-    inline static float    blockAngleSetting;
+    float    blockAngleSetting;
     inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = { 0xFF, 0xFF, 0xFF };
 
     inline static uint32_t blockKeyMouse{ 0xFF };

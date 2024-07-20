@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "valorperks",
-  "version-semver": "1.0.0",
+  "version-semver": "2.0.0",
   "builtin-baseline": "28b1cf627c0570b3e094192df2fce31a3a2bc1d3",
   "dependencies": [
     "fmt",

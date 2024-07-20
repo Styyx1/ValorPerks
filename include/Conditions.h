@@ -34,14 +34,14 @@ namespace Conditions
 
     inline static REL::Relocation<decltype(HasSpell)> _HasSpell;
 
-    static bool IsMoving(RE::PlayerCharacter* player)
+    inline static bool IsMoving(RE::PlayerCharacter* player)
     {
         auto playerState = player->AsActorState();
         return (static_cast<bool>(playerState->actorState1.movingForward) || static_cast<bool>(playerState->actorState1.movingBack)
                 || static_cast<bool>(playerState->actorState1.movingLeft) || static_cast<bool>(playerState->actorState1.movingRight));
     }
 
-    static RE::TESObjectWEAP* GetUnarmedWeapon()
+    inline static RE::TESObjectWEAP* GetUnarmedWeapon()
     {
         auto** singleton{ reinterpret_cast<RE::TESObjectWEAP**>(Cache::getUnarmedWeaponAddress) };
         return *singleton;
@@ -115,7 +115,7 @@ namespace Conditions
         auto weapon = a_actor->GetAttackingWeapon();
         auto rhs    = a_actor->GetEquippedObject(false);
         auto lhs    = a_actor->GetEquippedObject(true);
-        if (rhs && lhs && lhs->IsWeapon() && rhs->IsWeapon()) {
+        if (weapon && rhs && lhs && lhs->IsWeapon() && rhs->IsWeapon()) {
             logger::debug("dual wielding is active");
             return true;
         }
@@ -129,8 +129,10 @@ namespace Conditions
         Settings* settings            = Settings::GetSingleton();
         float     fCombatHitConeAngle = settings->blockAngleSetting;
 
-        auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
-        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
+        logger::debug("block angle is {}", fCombatHitConeAngle);
+        auto angle = blocker->GetHeadingAngle(a_obj->GetPosition(), false);
+        logger::debug("actual angle is {}", angle);
+        return (angle  <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
     }
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
