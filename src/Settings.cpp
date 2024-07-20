@@ -63,7 +63,7 @@ void Settings::AdjustWeaponStaggerVals()
     }
 }
 
-void Settings::GetIngameData() //hard coded FormIDs to keep the ini file simpler for users
+void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simpler for users
 {
     auto dataHandler = RE::TESDataHandler::GetSingleton();
 
@@ -108,7 +108,7 @@ void Settings::GetIngameData() //hard coded FormIDs to keep the ini file simpler
 void Settings::LoadForms()
 {
     auto dataHandler = RE::TESDataHandler::GetSingleton();
-    auto file = dataHandler->LookupLoadedModByName(FileName);
+    auto file        = dataHandler->LookupLoadedModByName(FileName);
 
     if (!file || file->compileIndex == 0xFF) {
         SKSE::stl::report_and_fail("Cannot find ValorPerks.esp."sv);
