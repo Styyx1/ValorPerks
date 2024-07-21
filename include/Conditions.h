@@ -123,17 +123,6 @@ namespace Conditions
             return false;
     }
 
-    inline static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
-    {
-        Settings* settings            = Settings::GetSingleton();
-        float     fCombatHitConeAngle = settings->blockAngleSetting;
-
-        logger::debug("block angle is {}", fCombatHitConeAngle);
-        auto angle = blocker->GetHeadingAngle(a_obj->GetPosition(), false);
-        logger::debug("actual angle is {}", angle);
-        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
-    }
-
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
     static bool IsPermanent(RE::MagicItem* item)

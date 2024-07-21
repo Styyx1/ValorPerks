@@ -32,19 +32,12 @@ namespace
             const Settings*      settings = Settings::GetSingleton();
             for (std::uint32_t count = 2; count > 0; --count) {
                 bool done = false;
-                if (hotkeyMouse.IsActive() && !Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
+                if ((hotkeyMouse.IsActive() || hotkeyDual.IsActive() || hotkey.IsActive() || hotkeyGamepad.IsActive()) && !Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
                     logger::debug("block key was pressed");
                     Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
                     logger::debug("PARRY SPELL APPLIED");
                     done = true;
                 }
-                if (hotkeyGamepad.IsActive() && !Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
-                    logger::debug("block key was pressed");
-                    Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
-                    logger::debug("PARRY SPELL APPLIED");
-                    done = true;
-                }
-
                 if (done) {
                     break;
                 }

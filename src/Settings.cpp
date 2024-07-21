@@ -118,14 +118,6 @@ void Settings::LoadForms()
     GetIngameData();
     SetGlobalsAndGameSettings();
 
-    auto isPowerAttacking                        = new RE::TESConditionItem;
-    isPowerAttacking->data.comparisonValue.f     = 1.0f;
-    isPowerAttacking->data.functionData.function = RE::FUNCTION_DATA::FunctionID::kIsPowerAttacking;
-
-    auto isPowerAttackingCond  = new RE::TESCondition;
-    isPowerAttackingCond->head = isPowerAttacking;
-    IsPowerAttacking           = isPowerAttackingCond;
-
     auto gameSettings = RE::GameSettingCollection::GetSingleton();
     blockAngleSetting = gameSettings->GetSetting("fCombatHitConeAngle")->GetFloat();
 

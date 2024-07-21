@@ -44,6 +44,7 @@ public:
     RE::EffectSetting* MAG_ParryWindowEffect;
     //Conditions
     RE::TESCondition* IsPowerAttacking;
+   
     //bools
     bool enableSneakStaminaCost;
     bool enableLevelDifficulty;
