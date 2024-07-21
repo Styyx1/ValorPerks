@@ -63,6 +63,7 @@ public:
     inline static uint32_t blockKeyKeyboard{ 0xFF };
     inline static uint32_t blockKeyGamePad{ 0xFF };
     int                    maxFrameCheck = 6;
+    uint32_t               dualBlockKey;
 
     static RE::FormID ParseFormID(const std::string& str);
 

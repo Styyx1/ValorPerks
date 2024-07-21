@@ -66,7 +66,6 @@ void Settings::AdjustWeaponStaggerVals()
 void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simpler for users
 {
     auto dataHandler = RE::TESDataHandler::GetSingleton();
-
     // Globals:
     StaminaCostGlobal    = dataHandler->LookupForm(0x0EDA69, FileName)->As<RE::TESGlobal>();
     NPCStaminaCostGlobal = dataHandler->LookupForm(0x0EDA6A, FileName)->As<RE::TESGlobal>();
@@ -120,6 +119,8 @@ void Settings::LoadForms()
 
     auto gameSettings = RE::GameSettingCollection::GetSingleton();
     blockAngleSetting = gameSettings->GetSetting("fCombatHitConeAngle")->GetFloat();
+
+    dualBlockKey = DualBlockKey->value;
 
     logger::info("All Forms loaded");
 }

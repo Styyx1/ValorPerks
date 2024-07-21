@@ -19,6 +19,8 @@ namespace MenuEventHandler
 
         RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent* event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*) override;
 
+        void SetDualKey();
+
         void RegisterMenuEvents()
         {
             if (const auto scripts = RE::UI::GetSingleton()) {

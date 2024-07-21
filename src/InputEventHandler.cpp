@@ -6,7 +6,7 @@ namespace
     {
     public:
         explicit HotkeyContext(const Settings* settings)
-            : hotkeyDual(settings->DualBlockKey->value), hotkey(settings->blockKeyKeyboard), hotkeyMouse(settings->blockKeyMouse), hotkeyGamepad(settings->blockKeyGamePad)
+            : hotkeyDual(settings->dualBlockKey), hotkey(settings->blockKeyKeyboard), hotkeyMouse(settings->blockKeyMouse), hotkeyGamepad(settings->blockKeyGamePad)
         {
         }
 
@@ -35,6 +35,7 @@ namespace
                 if ((hotkeyMouse.IsActive() || hotkeyDual.IsActive() || hotkey.IsActive() || hotkeyGamepad.IsActive())
                     && !Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect))
                 {
+                    logger::debug("dual block key is {}", settings->dualBlockKey);
                     logger::debug("block key was pressed");
                     Conditions::ApplySpell(player, player, settings->MAGParryControllerSpell);
                     logger::debug("PARRY SPELL APPLIED");
