@@ -44,14 +44,14 @@ public:
     RE::EffectSetting* MAG_ParryWindowEffect;
     // Conditions
     RE::TESCondition* IsPowerAttacking;
-   
-    //bools
-    bool enableSneakStaminaCost;
-    bool enableLevelDifficulty;
-    bool zeroAllWeapStagger;
-    bool armorScalingEnabled;
-    bool IsBlockingWeaponSpellCasted = false;
-    bool wasPowerAttacking = false;
+
+    // bools
+    bool               enableSneakStaminaCost;
+    bool               enableLevelDifficulty;
+    bool               zeroAllWeapStagger;
+    bool               armorScalingEnabled;
+    bool               IsBlockingWeaponSpellCasted = false;
+    bool               wasPowerAttacking           = false;
     inline static bool debug_logging{};
     // floats
     inline static float BonusXPPerLevel;

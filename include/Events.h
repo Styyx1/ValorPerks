@@ -106,16 +106,13 @@ public:
                 }
 
                 // Shield Parry (different hit explosion effects)
-                if (leftHand && leftHand->IsArmor() && blockedMeleeHit)
-                {
+                if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
                     auto settings = Settings::GetSingleton();
                     ProcessHitEventForParryShield(targetActor, causeActor);
                     if (isInBlockAngle(targetActor, causeActor)) {
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
-                    
-                    
                 }
                 else if (blockedMeleeHit) {
                     // Weapon Parry
@@ -125,8 +122,6 @@ public:
                         targetActor->PlaceObjectAtMe(settings->APOSparks, false);
                         targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
                     }
-                    
-                    
                 }
                 recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
             }
@@ -196,7 +191,6 @@ public:
         logger::debug("actual angle is {}", angle);
         return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
     }
-
 
     inline static void ApplyHandToHandXP()
     {
