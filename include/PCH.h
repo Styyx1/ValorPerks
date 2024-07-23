@@ -157,6 +157,8 @@
 #include <xbyak/xbyak.h>
 
 #define DLLEXPORT __declspec(dllexport)
+#define continueEvent RE::BSEventNotifyControl::kContinue;
+#define dlog logger::debug
 
 using namespace std::literals;
 using namespace REL::literals;

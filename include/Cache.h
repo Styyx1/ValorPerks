@@ -64,5 +64,4 @@ namespace Cache
         REL::Relocation<RE::SettingT<RE::GameSettingCollection>*> singleton{ fPlayerMaxResistanceAddress };
         return singleton;
     }
-
 } // namespace Cache

@@ -15,4 +15,5 @@ namespace Hooks
 
     bool InstallHooks();
     bool InstallBashMultHook();
+
 } // namespace Hooks

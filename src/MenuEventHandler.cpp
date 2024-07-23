@@ -7,8 +7,13 @@ RE::BSEventNotifyControl MenuEventHandler::MenuEvent::ProcessEvent(const RE::Men
     const Settings* settings     = Settings::GetSingleton();
 
     if (!event) {
-        return RE::BSEventNotifyControl::kContinue;
+        return continueEvent;
     }
+    if (event->opening) {
+        return continueEvent;
+    }
+    if (event->menuName != journal_menu)
+        return continueEvent;
 
     if (event->menuName == journal_menu) {
         if (!event->opening) {
@@ -16,7 +21,7 @@ RE::BSEventNotifyControl MenuEventHandler::MenuEvent::ProcessEvent(const RE::Men
             SetDualKey();
         }
     }
-    return RE::BSEventNotifyControl::kContinue;
+    return continueEvent;
 };
 
 void MenuEventHandler::MenuEvent::SetDualKey()

@@ -5,7 +5,7 @@
 #include <RecentHitEventData.h>
 
 using EventResult = RE::BSEventNotifyControl;
-#define continueEvent RE::BSEventNotifyControl::kContinue;
+
 
 class OnHitEventHandler : public RE::BSTEventSink<RE::TESHitEvent>
 {
@@ -25,170 +25,135 @@ public:
         return *runtime;
     }
 
-    inline static void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
+
+
+    EventResult ProcessEvent(const RE::TESHitEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESHitEvent>* a_eventSource) override
     {
-        logger::debug("processHitEvent For Parry started");
+        using HitFlag = RE::TESHitEvent::Flag;
+        if (!a_event || !a_event->target || !a_event->cause || a_event->projectile) {
+            return continueEvent;
+        }
+        // rewrite:
+        
+        auto defender = a_event->target ? a_event->target->As<RE::Actor>() : nullptr;
+        if (!defender) {
+            return continueEvent;
+        }
+        auto aggressor = a_event->cause ? a_event->cause->As<RE::Actor>() : nullptr;
+        if (!aggressor) {
+            return continueEvent;
+        }
+
+        // Hand to Hand XP only relevant for the player
+        if (!a_event->flags.any(HitFlag::kBashAttack) && a_event->target) {
+
+            if (a_event->flags.any(HitFlag::kHitBlocked) && a_event->target && !a_event->projectile) {
+                logger::debug;
+                ("entered block event");
+                auto attacking_weap = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
+                if (!defender || !attacking_weap || !defender->GetActorRuntimeData().currentProcess || !defender->GetActorRuntimeData().currentProcess->high
+                    || !attacking_weap->IsMelee() || !defender->Get3D())
+                {
+                    dlog("block event, first continue");
+                    return continueEvent;
+                }
+
+                if (!aggressor || !aggressor->GetActorRuntimeData().currentProcess || !aggressor->GetActorRuntimeData().currentProcess->high) {
+                    dlog("Attack Actor Not Found!");
+                    return continueEvent;
+                }
+                auto data_aggressor = aggressor->GetActorRuntimeData().currentProcess->high->attackData;
+                if (!data_aggressor) {
+                    dlog("Attacker Attack Data Not Found!");
+                    return continueEvent;
+                }
+                auto meleeweap = Conditions::getWieldingWeapon(aggressor);
+                auto leftHand  = defender->GetEquippedObject(true);
+                auto rightHand = defender->GetEquippedObject(false);
+
+                if (leftHand && leftHand->IsArmor()) {
+                    dlog("left hand is shield");
+                    if (defender->IsPlayerRef()) {
+                        ProcessHitEventForParryShield(defender, aggressor);
+                        PlaySparks(defender);
+                    }
+                    else {
+                        dlog("npc sparks with shield");
+                        PlaySparks(defender);
+                    }
+                }
+                else if (rightHand && rightHand->IsWeapon()) {
+                    dlog("left hand is empty");
+                    if (defender->IsPlayerRef()) {
+                        dlog("blocker is player");
+                        ProcessHitEventForParry(defender, aggressor);
+                        PlaySparks(defender);
+                    }
+                    else {
+                        dlog("npc sparks with weapon");
+                        PlaySparks(defender);
+                    }
+                }
+            }
+
+            dlog("Hand to hand first condition reached");
+            if (!a_event || !a_event->cause || !a_event->cause->IsPlayerRef() || a_event->target->IsNot(RE::FormType::ActorCharacter) || !a_event->source) {
+                dlog("H2H first continue event happened");
+                return continueEvent;
+            }
+            auto defenderProcess = defender->GetActorRuntimeData().currentProcess;
+            auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
+
+            if (!defender || !attackingWeapon || !defenderProcess || !defenderProcess->high || !attackingWeapon->IsMelee() || !defender->Get3D()) {
+                dlog("H2H second continue event happened");
+                return continueEvent;
+            }
+
+            auto player         = a_event->cause->As<RE::Actor>();
+            auto playerAttkData = player->GetActorRuntimeData().currentProcess->high->attackData;
+
+            if (!playerAttkData) {
+                dlog("H2H no player attack data found");
+                return continueEvent;
+            };
+            if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && !IsBeastRace() && attackingWeapon->IsHandToHandMelee()) {
+                dlog("H2H start to apply hand to hand xp");
+                ApplyHandToHandXP();
+            }
+        }
+        // Block event. Sparks and parries
+        
+        return continueEvent;        
+    }
+
+    void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
+    {
+        dlog("processHitEvent For Parry started");
         auto settings = Settings::GetSingleton();
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
-            logger::debug("condition is true");
+            dlog("condition is true");
             Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-            
+
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
         }
     }
 
-    inline static void ProcessHitEventForParryShield(RE::Actor* target, RE::Actor* aggressor)
+    void ProcessHitEventForParryShield(RE::Actor* target, RE::Actor* aggressor)
     {
         auto settings = Settings::GetSingleton();
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
             Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-           
+
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }
     }
 
-    EventResult ProcessEvent(const RE::TESHitEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESHitEvent>* a_eventSource) override
-    {
-        if (!a_event || !a_event->target || !a_event->cause) {
-            return continueEvent;
-        }
-        auto causeActor  = a_event->cause->As<RE::Actor>();
-        auto targetActor = a_event->target->As<RE::Actor>();
-
-        if (causeActor && targetActor && targetActor->IsPlayerRef() && !causeActor->IsPlayerRef()) {
-            auto applicationRuntime = GetDurationOfApplicationRunTime();
-
-            bool skipEvent = ShouldSkipHitEvent(causeActor, targetActor, applicationRuntime); // Filters out dupe events
-
-
-                logger::debug("!skip event line 66");
-                auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
-                if (attackingWeapon) {
-                    logger::debug("got attacking weapon with ID {}", attackingWeapon->GetFormID());
-                }
-                // Something is effed with power attacks. The source isnt coming through and casting as a weapon and the hit flags are empty
-                // We can work around it like this
-                bool powerAttackMelee = false;
-                if (a_event->flags.any(RE::TESHitEvent::Flag::kPowerAttack) || Conditions::IsPowerAttacking(causeActor)) {
-                    bool rightIsMeleeWeapon = false;                    
-                    if (auto rightHandForm = causeActor->GetEquippedObject(false)) {
-                        if (rightHandForm->IsWeapon() && rightHandForm->As<RE::TESObjectWEAP>()->IsMelee()) {
-                            rightIsMeleeWeapon = true;
-                        }
-                    }
-                    bool LeftIsMeleeWeaponOrNone = false;
-                    auto leftHandForm            = causeActor->GetEquippedObject(true);
-                    if (!leftHandForm || (leftHandForm->IsWeapon() && leftHandForm->As<RE::TESObjectWEAP>()->IsMelee()) || leftHandForm->IsArmor()) {
-                        LeftIsMeleeWeaponOrNone = true;
-                    }
-
-                    if (rightIsMeleeWeapon && LeftIsMeleeWeaponOrNone) {
-                        powerAttackMelee = true;
-                    }
-                }
-                auto defender = a_event->target->As<RE::Actor>();
-                logger::debug("defender is {}", defender->GetName());
-                if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && a_event->cause->IsPlayerRef() && !IsBeastRace()
-                    && attackingWeapon->IsHandToHandMelee())
-                {
-                    ApplyHandToHandXP();
-                };
-                bool isBlocking      = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) && targetActor->IsBlocking() ;
-                logger::debug("-------------------blocking bool active for the player");                
-                bool blockedMeleeHit = false;
-                auto meleeweap       = Conditions::getWieldingWeapon(causeActor);
-                if (isBlocking && a_event->target) {
-                    auto attackWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
-                    if (!a_event->projectile && (meleeweap && meleeweap->IsMelee() || powerAttackMelee)) {
-                        blockedMeleeHit = true;
-                        logger::debug("-------------------blocked MeleeHit == true");
-                    }
-                    auto leftHand = targetActor->GetEquippedObject(true);
-                    // Shield Parry (different hit explosion effects)
-                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
-                        logger::debug("-------------------shield parry");
-                        auto settings = Settings::GetSingleton();
-                        ProcessHitEventForParryShield(targetActor, causeActor);
-                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);                        
-                    }
-                    else if (blockedMeleeHit) {
-                        // Weapon Parry
-                        logger::debug("-------------------weapon parry");
-                        auto settings = Settings::GetSingleton();
-                        ProcessHitEventForParry(targetActor, causeActor);
-                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);                        
-                    }
-                }
-                
-                logger::debug("end of player hit event");
-                recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
-            
-        }
-        else if (causeActor && targetActor && causeActor->IsPlayerRef() && !targetActor->IsPlayerRef()) {
-            auto applicationRuntime = GetDurationOfApplicationRunTime();
-
-            bool skipEvent = ShouldSkipHitEvent(causeActor, targetActor, applicationRuntime); // Filters out dupe events
-
-            if (!skipEvent) {
-                logger::debug("!skip event line 129");
-                auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
-                
-                if (attackingWeapon) {
-                    logger::debug("got attacking weapon with ID {}", attackingWeapon->GetFormID());
-                }
-                // Something is effed with power attacks. The source isnt coming through and casting as a weapon and the hit flags are empty
-                // We can work around it like this
-                bool powerAttackMelee = false;
-                if (a_event->flags.any(RE::TESHitEvent::Flag::kPowerAttack) || Conditions::IsPowerAttacking(causeActor)) {
-                    bool rightIsMeleeWeapon = false;
-                    if (auto rightHandForm = causeActor->GetEquippedObject(false)) {
-                        if (rightHandForm->IsWeapon() && rightHandForm->As<RE::TESObjectWEAP>()->IsMelee()) {
-                            rightIsMeleeWeapon = true;
-                        }
-                    }
-
-                    bool LeftIsMeleeWeaponOrNone = false;
-                    auto leftHandForm            = causeActor->GetEquippedObject(true);
-                    if (!leftHandForm || (leftHandForm->IsWeapon() && leftHandForm->As<RE::TESObjectWEAP>()->IsMelee()) || leftHandForm->IsArmor()) {
-                        LeftIsMeleeWeaponOrNone = true;
-                    }
-
-                    if (rightIsMeleeWeapon && LeftIsMeleeWeaponOrNone) {
-                        powerAttackMelee = true;
-                    }
-                }
-
-                bool isBlocking = a_event->flags.any(RE::TESHitEvent::Flag::kHitBlocked) && targetActor->IsBlocking();
-                logger::debug("blocking bool active");
-                auto leftHand   = targetActor->GetEquippedObject(true);
-
-                bool blockedMeleeHit = false;
-                if (!a_event->projectile && ((attackingWeapon && attackingWeapon->IsMelee()) || powerAttackMelee) && isBlocking) {
-                    const Settings* settings = Settings::GetSingleton();
-                    blockedMeleeHit          = true;
-                    logger::debug("blocked MeleeHit == true");
-                    // Shield Parry (different hit explosion effects)
-                    if (leftHand && leftHand->IsArmor() && blockedMeleeHit) {
-                        logger::debug("shield block ");
-                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
-                    }
-                    else if (blockedMeleeHit) {
-                        // Weapon Parry
-                        logger::debug("weapon block");
-                        targetActor->PlaceObjectAtMe(settings->APOSparks, false);
-                        targetActor->PlaceObjectAtMe(settings->APOSparksPhysics, false);
-                    }
-                }
-                logger::debug("end of hit event");
-                recentGeneralHits.insert(std::make_pair(applicationRuntime, RecentHitEventData(targetActor, causeActor, applicationRuntime)));
-            }
-        }
-        return continueEvent;
+    void PlaySparks(RE::Actor* defender) {
+        const Settings* settings = Settings::GetSingleton();
+        defender->PlaceObjectAtMe(settings->APOSparks, false);
+        defender->PlaceObjectAtMe(settings->APOSparksPhysics, false);
     }
 
     bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
@@ -196,13 +161,13 @@ public:
         Settings* settings            = Settings::GetSingleton();
         float     fCombatHitConeAngle = settings->blockAngleSetting;
 
-        logger::debug("block angle is {}", fCombatHitConeAngle);
+        dlog("block angle is {}", fCombatHitConeAngle);
         auto angle = blocker->GetHeadingAngle(a_obj->GetHandle().get()->GetPosition(), false);
-        logger::debug("actual angle is {}", angle);
+        dlog("actual angle is {}", angle);
         return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
     }
 
-    inline static void ApplyHandToHandXP()
+    void ApplyHandToHandXP()
     {
         auto player = RE::PlayerCharacter::GetSingleton();
 
@@ -211,9 +176,10 @@ public:
         float baseXP = (Settings::BonusXPPerLevel * HandToHandLevel) + Settings::BaseXP;
 
         player->AddSkillExperience(RE::ActorValue::kLockpicking, baseXP);
+        dlog("[HAND TO HAND XP] granted {} of hand to hand experience", baseXP);
     }
 
-    static bool IsBeastRace()
+    bool IsBeastRace()
     {
         RE::MenuControls* MenuControls = RE::MenuControls::GetSingleton();
         return MenuControls->InBeastForm();
@@ -306,11 +272,11 @@ public:
         }
 
         if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
-            // logger::debug("event is {}", a_event->tag.c_str());
+            // dlog("event is {}", a_event->tag.c_str());
             if (std::strcmp(a_event->tag.c_str(), jumpAnimEventString) == 0) {
                 if (a_event->holder && a_event->holder->As<RE::Actor>() && !IsInBeastRace()) {
                     HandleJumpAnim();
-                    logger::debug("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
+                    dlog("jump happened and player is a {} and the event is {}", a_event->holder->As<RE::Actor>()->GetRace()->GetName(), a_event->tag.c_str());
                 }
             }
         }
@@ -351,7 +317,7 @@ public:
 
         // Register for anim event
         actor->AddAnimationGraphEventSink(AnimationGraphEventHandler::GetSingleton());
-        logger::debug("added animation graph");
+        dlog("added animation graph");
 
         return RE::BSEventNotifyControl::kContinue;
     }
@@ -412,3 +378,4 @@ public:
 
     inline static REL::Relocation<decltype(WeaponFire)> _Weapon_Fire;
 };
+
