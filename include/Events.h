@@ -6,7 +6,6 @@
 
 using EventResult = RE::BSEventNotifyControl;
 
-
 class OnHitEventHandler : public RE::BSTEventSink<RE::TESHitEvent>
 {
 public:
@@ -25,8 +24,6 @@ public:
         return *runtime;
     }
 
-
-
     EventResult ProcessEvent(const RE::TESHitEvent* a_event, [[maybe_unused]] RE::BSTEventSource<RE::TESHitEvent>* a_eventSource) override
     {
         using HitFlag = RE::TESHitEvent::Flag;
@@ -34,7 +31,7 @@ public:
             return continueEvent;
         }
         // rewrite:
-        
+
         auto defender = a_event->target ? a_event->target->As<RE::Actor>() : nullptr;
         if (!defender) {
             return continueEvent;
@@ -46,7 +43,6 @@ public:
 
         // Hand to Hand XP only relevant for the player
         if (!a_event->flags.any(HitFlag::kBashAttack) && a_event->target) {
-
             if (a_event->flags.any(HitFlag::kHitBlocked) && a_event->target && !a_event->projectile) {
                 logger::debug;
                 ("entered block event");
@@ -122,8 +118,8 @@ public:
             }
         }
         // Block event. Sparks and parries
-        
-        return continueEvent;        
+
+        return continueEvent;
     }
 
     void ProcessHitEventForParry(RE::Actor* target, RE::Actor* aggressor)
@@ -150,7 +146,8 @@ public:
         }
     }
 
-    void PlaySparks(RE::Actor* defender) {
+    void PlaySparks(RE::Actor* defender)
+    {
         const Settings* settings = Settings::GetSingleton();
         defender->PlaceObjectAtMe(settings->APOSparks, false);
         defender->PlaceObjectAtMe(settings->APOSparksPhysics, false);
@@ -378,4 +375,3 @@ public:
 
     inline static REL::Relocation<decltype(WeaponFire)> _Weapon_Fire;
 };
-
