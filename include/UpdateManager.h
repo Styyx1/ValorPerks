@@ -112,7 +112,6 @@ private:
                             // Parry setup
                             if ((!leftHand || leftHand->IsWeapon() || leftHand->IsArmor()) && !settings->IsBlockingWeaponSpellCasted) {
                                 settings->IsBlockingWeaponSpellCasted = true;
-                                
                             }
 
                             if (!HasSpell(player, settings->IsBlockingSpell)) {

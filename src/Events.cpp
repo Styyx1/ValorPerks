@@ -38,8 +38,8 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
     }
 
     if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
-        //debug logging to catch any animation event. used for potential new events 
-        //dlog("--- [ANIMATION EVENT] --- Animation Event is {} \n \n ", a_event->tag);
+        // debug logging to catch any animation event. used for potential new events
+        // dlog("--- [ANIMATION EVENT] --- Animation Event is {} \n \n ", a_event->tag);
         if (std::strcmp(a_event->tag.c_str(), HitString) == 0) {
             if (a_event->holder->As<RE::Actor>()) {
                 RE::PlayerCharacter* player         = Cache::GetPlayerSingleton();
