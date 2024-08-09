@@ -41,7 +41,8 @@ public:
             return continueEvent;
         }
 
-        // Hand to Hand XP only relevant for the player
+     
+        // Credits: https://github.com/colinswrath/handtohand/blob/main/src/Events.h for hand to hand event
         if (!a_event->flags.any(HitFlag::kBashAttack) && a_event->target) {
             if (a_event->flags.any(HitFlag::kHitBlocked) && a_event->target && !a_event->projectile) {
                 logger::debug;
@@ -153,17 +154,6 @@ public:
         defender->PlaceObjectAtMe(settings->APOSparksPhysics, false);
     }
 
-    bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
-    {
-        Settings* settings            = Settings::GetSingleton();
-        float     fCombatHitConeAngle = settings->blockAngleSetting;
-
-        dlog("block angle is {}", fCombatHitConeAngle);
-        auto angle = blocker->GetHeadingAngle(a_obj->GetHandle().get()->GetPosition(), false);
-        dlog("actual angle is {}", angle);
-        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
-    }
-
     void ApplyHandToHandXP()
     {
         auto player = RE::PlayerCharacter::GetSingleton();
@@ -232,15 +222,6 @@ public:
     }
 
     inline static void StaminaCost(RE::Actor* actor, double cost);
-
-    static bool isInBlockAngle(RE::Actor* blocker, RE::TESObjectREFR* a_obj)
-    {
-        Settings* settings            = Settings::GetSingleton();
-        float     fCombatHitConeAngle = settings->blockAngleSetting;
-
-        auto angle = blocker->GetHeadingAngle(a_obj->GetAngle(), false);
-        return (angle <= fCombatHitConeAngle && angle >= -fCombatHitConeAngle);
-    }
 
     const char* jumpAnimEventString = "JumpUp";
 

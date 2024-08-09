@@ -8,6 +8,7 @@ namespace Hooks
 {
     bool InstallHooks()
     {
+
         if (!UpdateManager::Install()) {
             return false;
         }
@@ -22,6 +23,8 @@ namespace Hooks
         }
 
         WeaponFireHandler::InstallArrowReleaseHook();
+
+        
 
         auto runtime = REL::Module::GetRuntime();
         if (Settings::GetSingleton()->armorScalingEnabled) {
@@ -40,6 +43,9 @@ namespace Hooks
             return false;
         }
 
+       
+
+
         return true;
     }
 
@@ -47,4 +53,6 @@ namespace Hooks
     {
         return BashBlockStaminaPatch::InstallBashMultHook();
     }
+
+
 } // namespace Hooks

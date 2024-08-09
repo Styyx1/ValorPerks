@@ -27,6 +27,8 @@ public:
     RE::SpellItem* APOParryBuffSPell;
     RE::SpellItem* jumpSpell;
     RE::SpellItem* PowerAttackStopSpell;
+
+    RE::SpellItem* DodgeRuneSpell;
     // Perks
     RE::BGSPerk* BashStaminaPerk;
     RE::BGSPerk* BlockStaminaPerk;

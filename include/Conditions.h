@@ -122,6 +122,106 @@ namespace Conditions
         else
             return false;
     }
+    // credits: https://github.com/Sacralletius/ANDR_SKSEFunctions currently unused though
+    struct ProjectileRot
+    {
+        float x, z;
+    };
+
+    inline float SkyrimSE_c51f70(RE::NiPoint3* dir)
+    {
+        using func_t = decltype(SkyrimSE_c51f70);
+        REL::Relocation<func_t> func{ REL::RelocationID(68820, 70172) };
+        return func(dir);
+    }
+
+    inline ProjectileRot rot_at(RE::NiPoint3 dir)
+    {
+        ProjectileRot rot;
+        auto          len = dir.Unitize();
+        if (len == 0) {
+            rot = { 0, 0 };
+        }
+        else {
+            float polar_angle = SkyrimSE_c51f70(&dir);
+            rot               = { -asin(dir.z), polar_angle };
+        }
+        return rot;
+    }
+
+    inline ProjectileRot rot_at(const RE::NiPoint3& from, const RE::NiPoint3& to)
+    {
+        return rot_at(to - from);
+    }
+
+   
+
+    inline static void CastSpellFromPointToPoint(RE::Actor* akSource, RE::SpellItem* akSpell, float StartPoint_X, float StartPoint_Y, float StartPoint_Z,
+                                   float EndPoint_X, float EndPoint_Y, float EndPoint_Z)
+    {
+        RE::NiPoint3 NodePosition;
+
+        NodePosition.x = StartPoint_X;
+        NodePosition.y = StartPoint_Y;
+        NodePosition.z = StartPoint_Z;
+        
+        logger::info("NodePosition: X = {}, Y = {}, Z = {}.", NodePosition.x, NodePosition.y, NodePosition.z);
+
+        RE::NiPoint3 DestinationPosition;
+
+        DestinationPosition.x = EndPoint_X;
+        DestinationPosition.y = EndPoint_Y;
+        DestinationPosition.z = EndPoint_Z;
+
+        logger::info("DestinationPosition: X = {}, Y = {}, Z = {}.", DestinationPosition.x, DestinationPosition.y, DestinationPosition.z);
+
+         auto rot = rot_at(NodePosition, DestinationPosition);
+
+        auto eff = akSpell->GetCostliestEffectItem();
+
+        auto mgef = akSpell->GetAVEffect();
+
+        RE::Projectile::LaunchData ldata;
+
+        logger::info("Angles are: Z = {} and X = {}", akSource->GetAngleZ(), akSource->GetAngleX());
+        logger::info("spell used is: {}", akSpell->GetName());
+
+        ldata.origin                = NodePosition;
+        ldata.contactNormal         = { 0.0f, 0.0f, 0.0f };
+        ldata.projectileBase        = mgef->data.projectileBase;
+        ldata.shooter               = akSource;
+        ldata.combatController      = akSource->GetActorRuntimeData().combatController;
+        ldata.weaponSource          = nullptr;
+        ldata.ammoSource            = nullptr;
+        ldata.angleZ                = rot.z;
+        ldata.angleX                = rot.x;
+        logger::info(" Projectile Angles are: Z = {} and X = {}", ldata.angleZ, ldata.angleX);
+        ldata.unk50                 = nullptr;
+        ldata.desiredTarget         = nullptr;
+        ldata.unk60                 = 0.0f;
+        ldata.unk64                 = 0.0f;
+        ldata.parentCell            = akSource->GetParentCell();
+        ldata.spell                 = akSpell;
+        ldata.castingSource         = RE::MagicSystem::CastingSource::kOther;
+        ldata.pad7C                 = 0;
+        ldata.enchantItem           = nullptr;
+        ldata.poison                = nullptr;
+        ldata.area                  = eff->GetArea();
+        ldata.power                 = 1.0f;
+        ldata.scale                 = 1.0f;
+        ldata.alwaysHit             = false;
+        ldata.noDamageOutsideCombat = false;
+        ldata.autoAim               = false;
+        ldata.chainShatter          = false;
+        ldata.useOrigin             = true;
+        ldata.deferInitialization   = false;
+        ldata.forceConeOfFire       = false;
+        RE::BSPointerHandle<RE::Projectile> handle;
+        RE::Projectile::Launch(&handle, ldata);
+    }
+
+
+
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
