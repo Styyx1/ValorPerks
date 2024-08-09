@@ -164,7 +164,7 @@ namespace Conditions
         NodePosition.y = StartPoint_Y;
         NodePosition.z = StartPoint_Z;
 
-        logger::info("NodePosition: X = {}, Y = {}, Z = {}.", NodePosition.x, NodePosition.y, NodePosition.z);
+        logger::debug("NodePosition: X = {}, Y = {}, Z = {}.", NodePosition.x, NodePosition.y, NodePosition.z);
 
         RE::NiPoint3 DestinationPosition;
 
@@ -172,7 +172,7 @@ namespace Conditions
         DestinationPosition.y = EndPoint_Y;
         DestinationPosition.z = EndPoint_Z;
 
-        logger::info("DestinationPosition: X = {}, Y = {}, Z = {}.", DestinationPosition.x, DestinationPosition.y, DestinationPosition.z);
+        logger::debug("DestinationPosition: X = {}, Y = {}, Z = {}.", DestinationPosition.x, DestinationPosition.y, DestinationPosition.z);
 
         auto rot = rot_at(NodePosition, DestinationPosition);
 
@@ -182,19 +182,15 @@ namespace Conditions
 
         RE::Projectile::LaunchData ldata;
 
-        logger::info("Angles are: Z = {} and X = {}", akSource->GetAngleZ(), akSource->GetAngleX());
-        logger::info("spell used is: {}", akSpell->GetName());
-
-        ldata.origin           = NodePosition;
-        ldata.contactNormal    = { 0.0f, 0.0f, 0.0f };
-        ldata.projectileBase   = mgef->data.projectileBase;
-        ldata.shooter          = akSource;
-        ldata.combatController = akSource->GetActorRuntimeData().combatController;
-        ldata.weaponSource     = nullptr;
-        ldata.ammoSource       = nullptr;
-        ldata.angleZ           = rot.z;
-        ldata.angleX           = rot.x;
-        logger::info(" Projectile Angles are: Z = {} and X = {}", ldata.angleZ, ldata.angleX);
+        ldata.origin                = NodePosition;
+        ldata.contactNormal         = { 0.0f, 0.0f, 0.0f };
+        ldata.projectileBase        = mgef->data.projectileBase;
+        ldata.shooter               = akSource;
+        ldata.combatController      = akSource->GetActorRuntimeData().combatController;
+        ldata.weaponSource          = nullptr;
+        ldata.ammoSource            = nullptr;
+        ldata.angleZ                = rot.z;
+        ldata.angleX                = rot.x;
         ldata.unk50                 = nullptr;
         ldata.desiredTarget         = nullptr;
         ldata.unk60                 = 0.0f;
