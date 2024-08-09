@@ -62,7 +62,7 @@ void InitListener(SKSE::MessagingInterface::Message* a_msg)
 
 extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version = []() {
     SKSE::PluginVersionData v{};
-    v.PluginVersion(REL::Version{ 2, 6, 0, 0 });
+    v.PluginVersion(REL::Version{ 2, 7, 0, 0 });
     v.PluginName("ValorPerks"sv);
     v.AuthorName("colinswrath and Kernalsegg modified by Styyx"sv);
     v.UsesAddressLibrary(true);

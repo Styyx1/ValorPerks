@@ -3,7 +3,7 @@ message("Using toolchain file ${CMAKE_TOOLCHAIN_FILE}.")
 
 project(
   ValorPerks
-  VERSION 1.0.0
+  VERSION 2.7.0
   LANGUAGES CXX
 )
 set(CMAKE_CXX_STANDARD 23)
