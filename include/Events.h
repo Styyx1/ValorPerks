@@ -41,7 +41,6 @@ public:
             return continueEvent;
         }
 
-     
         // Credits: https://github.com/colinswrath/handtohand/blob/main/src/Events.h for hand to hand event
         if (!a_event->flags.any(HitFlag::kBashAttack) && a_event->target) {
             if (a_event->flags.any(HitFlag::kHitBlocked) && a_event->target && !a_event->projectile) {

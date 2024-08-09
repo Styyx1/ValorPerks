@@ -105,7 +105,7 @@ void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simple
 
     // vanilla spell
     // 0x5db90 fire rune // firebolt 0x12fd0 // flaming familiar 0x9ce26 // flame wall 0x35d7f // fireball 0x1c789
-    DodgeRuneSpell = dataHandler->LookupForm(0x1c789, "Skyrim.esm")->As<RE::SpellItem>(); 
+    DodgeRuneSpell = dataHandler->LookupForm(0x1c789, "Skyrim.esm")->As<RE::SpellItem>();
 }
 
 void Settings::LoadForms()

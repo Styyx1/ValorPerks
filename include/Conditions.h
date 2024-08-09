@@ -122,6 +122,7 @@ namespace Conditions
         else
             return false;
     }
+
     // credits: https://github.com/Sacralletius/ANDR_SKSEFunctions currently unused though
     struct ProjectileRot
     {
@@ -154,17 +155,15 @@ namespace Conditions
         return rot_at(to - from);
     }
 
-   
-
-    inline static void CastSpellFromPointToPoint(RE::Actor* akSource, RE::SpellItem* akSpell, float StartPoint_X, float StartPoint_Y, float StartPoint_Z,
-                                   float EndPoint_X, float EndPoint_Y, float EndPoint_Z)
+    inline static void CastSpellFromPointToPoint(RE::Actor* akSource, RE::SpellItem* akSpell, float StartPoint_X, float StartPoint_Y, float StartPoint_Z, float EndPoint_X,
+                                                 float EndPoint_Y, float EndPoint_Z)
     {
         RE::NiPoint3 NodePosition;
 
         NodePosition.x = StartPoint_X;
         NodePosition.y = StartPoint_Y;
         NodePosition.z = StartPoint_Z;
-        
+
         logger::info("NodePosition: X = {}, Y = {}, Z = {}.", NodePosition.x, NodePosition.y, NodePosition.z);
 
         RE::NiPoint3 DestinationPosition;
@@ -175,7 +174,7 @@ namespace Conditions
 
         logger::info("DestinationPosition: X = {}, Y = {}, Z = {}.", DestinationPosition.x, DestinationPosition.y, DestinationPosition.z);
 
-         auto rot = rot_at(NodePosition, DestinationPosition);
+        auto rot = rot_at(NodePosition, DestinationPosition);
 
         auto eff = akSpell->GetCostliestEffectItem();
 
@@ -186,15 +185,15 @@ namespace Conditions
         logger::info("Angles are: Z = {} and X = {}", akSource->GetAngleZ(), akSource->GetAngleX());
         logger::info("spell used is: {}", akSpell->GetName());
 
-        ldata.origin                = NodePosition;
-        ldata.contactNormal         = { 0.0f, 0.0f, 0.0f };
-        ldata.projectileBase        = mgef->data.projectileBase;
-        ldata.shooter               = akSource;
-        ldata.combatController      = akSource->GetActorRuntimeData().combatController;
-        ldata.weaponSource          = nullptr;
-        ldata.ammoSource            = nullptr;
-        ldata.angleZ                = rot.z;
-        ldata.angleX                = rot.x;
+        ldata.origin           = NodePosition;
+        ldata.contactNormal    = { 0.0f, 0.0f, 0.0f };
+        ldata.projectileBase   = mgef->data.projectileBase;
+        ldata.shooter          = akSource;
+        ldata.combatController = akSource->GetActorRuntimeData().combatController;
+        ldata.weaponSource     = nullptr;
+        ldata.ammoSource       = nullptr;
+        ldata.angleZ           = rot.z;
+        ldata.angleX           = rot.x;
         logger::info(" Projectile Angles are: Z = {} and X = {}", ldata.angleZ, ldata.angleX);
         ldata.unk50                 = nullptr;
         ldata.desiredTarget         = nullptr;
@@ -219,9 +218,6 @@ namespace Conditions
         RE::BSPointerHandle<RE::Projectile> handle;
         RE::Projectile::Launch(&handle, ldata);
     }
-
-
-
 
     // Credit: KernalsEgg for ApplySpell and IsPermanent
     // extensions
