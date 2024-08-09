@@ -121,19 +121,23 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
     /*if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()){
         if (std::strcmp(a_event->tag.c_str(), DodgeString) == 0) {
             if
+     *
      * (a_event->holder->As<RE::Actor>()) {
                 logger::debug("Dodge happened");
                 RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
  const
-     * Settings*      settings = Settings::GetSingleton();
+
+     * * Settings*      settings = Settings::GetSingleton();
 
                 RE::NiPoint3 playerPos;
                 playerPos.x = player->GetPositionX();
  playerPos.y =
+     *
      * player->GetPositionY();
                 playerPos.z = player->GetPositionZ();
 
                 Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell,
+     *
      * playerPos.x + 450, playerPos.y + 10, playerPos.z + 850, playerPos.x + 3, playerPos.y + 5, playerPos.z - 150);
             }
         }
