@@ -92,16 +92,13 @@ public:
                 }
             }
 
-            dlog("Hand to hand first condition reached");
             if (!a_event || !a_event->cause || !a_event->cause->IsPlayerRef() || a_event->target->IsNot(RE::FormType::ActorCharacter) || !a_event->source) {
-                dlog("H2H first continue event happened");
                 return continueEvent;
             }
             auto defenderProcess = defender->GetActorRuntimeData().currentProcess;
             auto attackingWeapon = RE::TESForm::LookupByID<RE::TESObjectWEAP>(a_event->source);
 
             if (!defender || !attackingWeapon || !defenderProcess || !defenderProcess->high || !attackingWeapon->IsMelee() || !defender->Get3D()) {
-                dlog("H2H second continue event happened");
                 return continueEvent;
             }
 
@@ -109,7 +106,6 @@ public:
             auto playerAttkData = player->GetActorRuntimeData().currentProcess->high->attackData;
 
             if (!playerAttkData) {
-                dlog("H2H no player attack data found");
                 return continueEvent;
             };
             if ((defender->AsActorState()->GetLifeState() != RE::ACTOR_LIFE_STATE::kDead) && !IsBeastRace() && attackingWeapon->IsHandToHandMelee()) {
@@ -134,7 +130,6 @@ public:
                 dlog("applied spell to {}", actors->GetName());
             }            
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
         }
     }
@@ -148,7 +143,6 @@ public:
                 dlog("applied spell to {}", actors->GetName());
             } 
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
-
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }
     }
