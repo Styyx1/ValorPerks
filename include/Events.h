@@ -128,7 +128,7 @@ public:
             for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
                 Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
                 dlog("applied spell to {}", actors->GetName());
-            }            
+            }
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
         }
@@ -141,7 +141,7 @@ public:
             for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
                 Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
                 dlog("applied spell to {}", actors->GetName());
-            } 
+            }
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }

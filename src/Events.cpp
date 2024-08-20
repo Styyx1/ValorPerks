@@ -118,17 +118,17 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
             }
         }
     }
-    if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()){
+    if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
         if (std::strcmp(a_event->tag.c_str(), DodgeString) == 0) {
             if (a_event->holder->As<RE::Actor>()) {
                 logger::debug("Dodge happened");
-                RE::PlayerCharacter* player = Cache::GetPlayerSingleton();
+                RE::PlayerCharacter* player   = Cache::GetPlayerSingleton();
                 const Settings*      settings = Settings::GetSingleton();
-                RE::NiPoint3 playerPos;
+                RE::NiPoint3         playerPos;
                 playerPos.x = player->GetPositionX();
                 playerPos.y = player->GetPositionY();
                 playerPos.z = player->GetPositionZ();
-                Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x , playerPos.y , playerPos.z +10, playerPos.x, playerPos.y, playerPos.z - 150);
+                Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x, playerPos.y, playerPos.z + 10, playerPos.x, playerPos.y, playerPos.z - 150);
             }
         }
     }

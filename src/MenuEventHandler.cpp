@@ -5,7 +5,7 @@ RE::BSEventNotifyControl MenuEventHandler::MenuEvent::ProcessEvent(const RE::Men
     auto            input_event  = Input::InputEventSink::GetSingleton();
     auto            journal_menu = RE::JournalMenu::MENU_NAME;
     const Settings* settings     = Settings::GetSingleton();
-    RE::UI*            menu         = RE::UI::GetSingleton();
+    RE::UI*         menu         = RE::UI::GetSingleton();
 
     if (!event) {
         return continueEvent;
@@ -20,10 +20,10 @@ RE::BSEventNotifyControl MenuEventHandler::MenuEvent::ProcessEvent(const RE::Men
         if (!event->opening) {
             input_event->GetMappedKey();
             logger::debug("got mapped keys");
-            SetDualKey();            
-        }        
+            SetDualKey();
+        }
     }
-        
+
     return continueEvent;
 };
 

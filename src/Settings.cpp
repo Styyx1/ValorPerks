@@ -22,8 +22,8 @@ void Settings::LoadSettings()
     debug_logging          = ini.GetBoolValue("", "Debug");
 
     surroundingActorsRange = (float)ini.GetDoubleValue("", "fRangeActors", 16.0);
-    auto bonusXP = (float)ini.GetDoubleValue("", "fBonusXPPerLevel", 0.15);
-    auto baseXP  = (float)ini.GetDoubleValue("", "fBaseXPHerHit", 3.0);
+    auto bonusXP           = (float)ini.GetDoubleValue("", "fBonusXPPerLevel", 0.15);
+    auto baseXP            = (float)ini.GetDoubleValue("", "fBaseXPHerHit", 3.0);
 
     (bonusXP < 0.0 || bonusXP > 100.0) ? BonusXPPerLevel = 0.15f : BonusXPPerLevel = bonusXP;
     baseXP < 0.0 ? BaseXP = 3.0f : BaseXP = baseXP;
