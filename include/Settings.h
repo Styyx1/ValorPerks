@@ -68,9 +68,8 @@ public:
     int                    maxFrameCheck = 6;
     uint32_t               dualBlockKey;
 
-    //tests
+    // tests
     RE::BGSPerk* dualEnchPerk;
-
 
     static RE::FormID ParseFormID(const std::string& str);
 

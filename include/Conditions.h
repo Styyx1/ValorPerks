@@ -136,7 +136,6 @@ namespace Conditions
                 const auto squaredRadius = a_radius * a_radius;
                 const auto originPos     = a_ref->GetPosition();
 
-                
                 result.reserve(processLists->numberHighActors);
 
                 const auto get_actor_within_radius = [&](RE::Actor* a_actor) {
@@ -160,10 +159,7 @@ namespace Conditions
             }
             return result;
         }
-
     }
-
-
 
     // credits: https://github.com/Sacralletius/ANDR_SKSEFunctions currently unused though
     struct ProjectileRot
