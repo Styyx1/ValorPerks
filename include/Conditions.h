@@ -123,6 +123,48 @@ namespace Conditions
             return false;
     }
 
+    inline static std::vector<RE::Actor*> GetNearbyActors(RE::TESObjectREFR* a_ref, float a_radius, bool a_ignorePlayer)
+    {
+        {
+            std::vector<RE::Actor*> result;
+            if (const auto processLists = RE::ProcessLists::GetSingleton(); processLists) {
+                if (a_ignorePlayer && processLists->numberHighActors == 0) {
+                    dlog("no process list");
+                    return result;
+                }
+
+                const auto squaredRadius = a_radius * a_radius;
+                const auto originPos     = a_ref->GetPosition();
+
+                
+                result.reserve(processLists->numberHighActors);
+
+                const auto get_actor_within_radius = [&](RE::Actor* a_actor) {
+                    if (a_actor && a_actor != a_ref && originPos.GetSquaredDistance(a_actor->GetPosition()) <= squaredRadius) {
+                        result.emplace_back(a_actor);
+                    }
+                };
+                for (auto& actorHandle : processLists->highActorHandles) {
+                    const auto actor = actorHandle.get();
+                    get_actor_within_radius(actor.get());
+                }
+
+                if (!a_ignorePlayer) {
+                    get_actor_within_radius(Cache::GetPlayerSingleton());
+                }
+
+                if (!result.empty()) {
+                    dlog("vector is not empty");
+                    return result;
+                }
+            }
+            return result;
+        }
+
+    }
+
+
+
     // credits: https://github.com/Sacralletius/ANDR_SKSEFunctions currently unused though
     struct ProjectileRot
     {

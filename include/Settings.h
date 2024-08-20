@@ -59,6 +59,7 @@ public:
     inline static float BonusXPPerLevel;
     inline static float BaseXP;
     float               blockAngleSetting;
+    float               surroundingActorsRange;
     // int
     inline static uint32_t blockingKey[RE::INPUT_DEVICE::kFlatTotal] = { 0xFF, 0xFF, 0xFF };
     inline static uint32_t blockKeyMouse{ 0xFF };
@@ -66,6 +67,10 @@ public:
     inline static uint32_t blockKeyGamePad{ 0xFF };
     int                    maxFrameCheck = 6;
     uint32_t               dualBlockKey;
+
+    //tests
+    RE::BGSPerk* dualEnchPerk;
+
 
     static RE::FormID ParseFormID(const std::string& str);
 

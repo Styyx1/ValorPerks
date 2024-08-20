@@ -128,7 +128,11 @@ public:
         auto settings = Settings::GetSingleton();
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
             dlog("condition is true");
-            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
+            dlog("range is {}", settings->surroundingActorsRange);
+            for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
+                Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
+                dlog("applied spell to {}", actors->GetName());
+            }            
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
 
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
@@ -139,7 +143,10 @@ public:
     {
         auto settings = Settings::GetSingleton();
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
-            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
+            for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
+                Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
+                dlog("applied spell to {}", actors->GetName());
+            } 
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
 
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
