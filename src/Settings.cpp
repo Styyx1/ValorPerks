@@ -108,7 +108,7 @@ void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simple
     // 0x5db90 fire rune // firebolt 0x12fd0 // flaming familiar 0x9ce26 // flame wall 0x35d7f // fireball 0x1c789 // poison cloud 0xA036E // (0x802, "poisonCloudTestSpell.esp") //
     // mysticism: (0x1E6352, "MysticismMagic.esp") // for Valor to actually use: 0x10C0EA, FileName
     DodgeRuneSpell = dataHandler->LookupForm(0x10C0EA, FileName)->As<RE::SpellItem>();
-    dualEnchPerk   = dataHandler->LookupForm(0x58f7f, "Skyrim.esm")->As<RE::BGSPerk>();
+    dummyPerkDodge = dataHandler->LookupForm(0x111211, FileName)->As<RE::BGSPerk>();
 }
 
 void Settings::LoadForms()

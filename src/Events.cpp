@@ -31,6 +31,7 @@ inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnima
 inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                      RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
+    
     const char* HitString   = "HitFrame";
     const char* DodgeString = "TKDR_DodgeStart"; // Test to make stuff while dodging
 
@@ -121,14 +122,17 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
     if (!a_event->tag.empty() && a_event->holder && a_event->holder->As<RE::Actor>()) {
         if (std::strcmp(a_event->tag.c_str(), DodgeString) == 0) {
             if (a_event->holder->As<RE::Actor>()) {
-                logger::debug("Dodge happened");
-                RE::PlayerCharacter* player   = Cache::GetPlayerSingleton();
-                const Settings*      settings = Settings::GetSingleton();
-                RE::NiPoint3         playerPos;
-                playerPos.x = player->GetPositionX();
-                playerPos.y = player->GetPositionY();
-                playerPos.z = player->GetPositionZ();
-                Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x, playerPos.y, playerPos.z + 10, playerPos.x, playerPos.y, playerPos.z - 150);
+                Settings* settings = Settings::GetSingleton();
+                if (a_event->holder->As<RE::Actor>()->HasPerk(settings->dummyPerkDodge)) {
+                    logger::debug("Dodge happened");
+                    RE::PlayerCharacter* player   = Cache::GetPlayerSingleton();
+                    const Settings*      settings = Settings::GetSingleton();
+                    RE::NiPoint3         playerPos;
+                    playerPos.x = player->GetPositionX();
+                    playerPos.y = player->GetPositionY();
+                    playerPos.z = player->GetPositionZ();
+                    Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x, playerPos.y, playerPos.z + 10, playerPos.x, playerPos.y, playerPos.z - 150);
+                }                
             }
         }
     }

@@ -69,7 +69,7 @@ public:
     uint32_t               dualBlockKey;
 
     // tests
-    RE::BGSPerk* dualEnchPerk;
+    RE::BGSPerk* dummyPerkDodge;
 
     static RE::FormID ParseFormID(const std::string& str);
 

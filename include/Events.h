@@ -126,9 +126,12 @@ public:
             dlog("condition is true");
             dlog("range is {}", settings->surroundingActorsRange);
             for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
-                Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
-                dlog("applied spell to {}", actors->GetName());
+                if (actors != aggressor) {
+                    Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
+                    dlog("applied spell to {}", actors->GetName());
+                }
             }
+            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
             target->PlaceObjectAtMe(settings->APOSparksFlash, false);
         }
@@ -139,9 +142,12 @@ public:
         auto settings = Settings::GetSingleton();
         if (Conditions::PlayerHasActiveMagicEffect(settings->MAG_ParryWindowEffect)) {
             for (auto& actors : Conditions::GetNearbyActors(target, settings->surroundingActorsRange, false)) {
-                Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
-                dlog("applied spell to {}", actors->GetName());
+                if (actors != aggressor) {
+                    Conditions::ApplySpell(target, actors, settings->MAGParryStaggerSpell);
+                    dlog("applied spell to {}", actors->GetName());
+                }
             }
+            Conditions::ApplySpell(target, aggressor, settings->MAGParryStaggerSpell);
             Conditions::ApplySpell(aggressor, target, settings->APOParryBuffSPell);
             target->PlaceObjectAtMe(settings->APOSparksShieldFlash, false);
         }
