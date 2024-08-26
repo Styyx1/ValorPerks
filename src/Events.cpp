@@ -31,7 +31,6 @@ inline void AnimationGraphEventHandler::ProcessJump(RE::BSTEventSink<RE::BSAnima
 inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event,
                                                      RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 {
-    
     const char* HitString   = "HitFrame";
     const char* DodgeString = "TKDR_DodgeStart"; // Test to make stuff while dodging
 
@@ -131,8 +130,9 @@ inline void AnimationGraphEventHandler::ProcessEvent(RE::BSTEventSink<RE::BSAnim
                     playerPos.x = player->GetPositionX();
                     playerPos.y = player->GetPositionY();
                     playerPos.z = player->GetPositionZ();
-                    Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x, playerPos.y, playerPos.z + 10, playerPos.x, playerPos.y, playerPos.z - 150);
-                }                
+                    Conditions::CastSpellFromPointToPoint(player, settings->DodgeRuneSpell, playerPos.x, playerPos.y, playerPos.z + 10, playerPos.x, playerPos.y,
+                                                          playerPos.z - 150);
+                }
             }
         }
     }
