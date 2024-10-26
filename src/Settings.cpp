@@ -68,9 +68,9 @@ void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simple
 {
     auto dataHandler = RE::TESDataHandler::GetSingleton();
     // Globals:
-    StaminaCostGlobal    = dataHandler->LookupForm(0x0EDA69, FileName)->As<RE::TESGlobal>();
-    NPCStaminaCostGlobal = dataHandler->LookupForm(0x0EDA6A, FileName)->As<RE::TESGlobal>();
-    DualBlockKey         = dataHandler->LookupForm(0x10C0DB, FileName)->As<RE::TESGlobal>();
+    StaminaCostGlobal    = dataHandler->LookupForm(0x00025C, FileName)->As<RE::TESGlobal>();
+    NPCStaminaCostGlobal = dataHandler->LookupForm(0x00025D, FileName)->As<RE::TESGlobal>();
+    DualBlockKey         = dataHandler->LookupForm(0x0002BD, FileName)->As<RE::TESGlobal>();
 
     // Perks:
     BashStaminaPerk  = dataHandler->LookupForm(0xADA510, "Update.esm")->As<RE::BGSPerk>();
@@ -82,8 +82,8 @@ void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simple
 
     // Spells:
     IsBlockingSpell              = dataHandler->LookupForm(0x000DAC, FileName)->As<RE::SpellItem>();
-    PowerAttackStopSpell         = dataHandler->LookupForm(0x0E8932, FileName)->As<RE::SpellItem>();
-    jumpSpell                    = dataHandler->LookupForm(0x0E892F, FileName)->As<RE::SpellItem>();
+    PowerAttackStopSpell         = dataHandler->LookupForm(0x000228, FileName)->As<RE::SpellItem>();
+    jumpSpell                    = dataHandler->LookupForm(0x000225, FileName)->As<RE::SpellItem>();
     IsAttackingSpell             = dataHandler->LookupForm(0x000DA9, FileName)->As<RE::SpellItem>();
     IsSneakingSpell              = dataHandler->LookupForm(0x000DB4, FileName)->As<RE::SpellItem>();
     IsSprintingSpell             = dataHandler->LookupForm(0x000DB6, FileName)->As<RE::SpellItem>();
@@ -93,22 +93,22 @@ void Settings::GetIngameData() // hard coded FormIDs to keep the ini file simple
     IsCastingSpell               = dataHandler->LookupForm(0x000DB5, FileName)->As<RE::SpellItem>();
     MAGParryControllerSpell      = dataHandler->LookupForm(0x000DB2, FileName)->As<RE::SpellItem>();
     MAGParryStaggerSpell         = dataHandler->LookupForm(0x000DB3, FileName)->As<RE::SpellItem>();
-    APOParryBuffSPell            = dataHandler->LookupForm(0x23040, FileName)->As<RE::SpellItem>();
+    APOParryBuffSPell            = dataHandler->LookupForm(0x0000AE, FileName)->As<RE::SpellItem>();
     MAGCrossbowStaminaDrainSpell = dataHandler->LookupForm(0x000DAF, FileName)->As<RE::SpellItem>();
-    MAGBlockStaggerSpell         = dataHandler->LookupForm(0x000DAA, FileName)->As<RE::SpellItem>();
+	MAGBlockStaggerSpell         = dataHandler->LookupForm(0x000DAA, FileName)->As<RE::SpellItem>();
     MAGBlockStaggerSpell2        = dataHandler->LookupForm(0x000DAB, FileName)->As<RE::SpellItem>();
 
     // Explosions:
-    APOSparksShieldFlash = dataHandler->LookupForm(0x18E3E, FileName)->As<RE::BGSExplosion>();
-    APOSparksFlash       = dataHandler->LookupForm(0x18E3D, FileName)->As<RE::BGSExplosion>();
-    APOSparksPhysics     = dataHandler->LookupForm(0x18E3C, FileName)->As<RE::BGSExplosion>();
-    APOSparks            = dataHandler->LookupForm(0x18E3B, FileName)->As<RE::BGSExplosion>();
+    APOSparksShieldFlash = dataHandler->LookupForm(0x0000AC, FileName)->As<RE::BGSExplosion>();
+    APOSparksFlash       = dataHandler->LookupForm(0x0000AB, FileName)->As<RE::BGSExplosion>();
+    APOSparksPhysics     = dataHandler->LookupForm(0x0000A9, FileName)->As<RE::BGSExplosion>();
+    APOSparks            = dataHandler->LookupForm(0x0000AA, FileName)->As<RE::BGSExplosion>();
 
     // vanilla spell
     // 0x5db90 fire rune // firebolt 0x12fd0 // flaming familiar 0x9ce26 // flame wall 0x35d7f // fireball 0x1c789 // poison cloud 0xA036E // (0x802, "poisonCloudTestSpell.esp") //
     // mysticism: (0x1E6352, "MysticismMagic.esp") // for Valor to actually use: 0x10C0EA, FileName
-    DodgeRuneSpell = dataHandler->LookupForm(0x10C0EA, FileName)->As<RE::SpellItem>();
-    dummyPerkDodge = dataHandler->LookupForm(0x111211, FileName)->As<RE::BGSPerk>();
+    DodgeRuneSpell = dataHandler->LookupForm(0x0002C8, FileName)->As<RE::SpellItem>();
+    dummyPerkDodge = dataHandler->LookupForm(0x0002E9, FileName)->As<RE::BGSPerk>();
 }
 
 void Settings::LoadForms()
