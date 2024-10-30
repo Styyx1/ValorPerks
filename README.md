@@ -1,6 +1,31 @@
-# CommonLibSSE-NG Plugin Template
+# Valor Perks 
+## Features:
 
-This is a basic plugin template using CommonLibSSE-NG.
+**Adds specified spells in ini for the following scenarios:**  
+- `IsAttacking`
+- `IsBlocking`
+- `IsSneaking`
+- `IsSprinting` (including differentiation for Mounted)
+- `IsCasting`
+- `Spell when drawing bow`  
+- `Spell when firing xbow`  
+- `Spell when reloading xbow`  
+- `IsJumping`
+
+**Includes engine fixes/changes for:**  
+- `Movement speed for player scale`  
+- `Block cap will use fBlockMax instead of fPlayerMaxResistance`  
+- `Spell absorption cap will no longer exceed fPlayerMaxResistance` 
+
+**Other features**  
+- `Implements a new armor rating scaling formula`    
+- `Overrides the Stamina cost of Blocking and Bashing`
+- `Implements a Stamina Cost for light attacks` (Controlled by a global variable, one for player and one for NPCs)
+- `Spawns Sparks on timed blocks/parries`
+- `Applies a spell to aggressor upon a successful timed block/parry`
+- `Redirects lockpicking XP to pickpocket`
+- `Catches melee attacks while unarmed and redirects the XP to lockpicking`
+- `Changes XP bar in lockpick menu to use pickpocket XP and level`
 
 ### Requirements
 * [XMake](https://xmake.io) [2.8.2+]
@@ -8,8 +33,9 @@ This is a basic plugin template using CommonLibSSE-NG.
 
 ## Getting Started
 ```bat
-git clone --recurse-submodules https://github.com/qudix/commonlibsse-ng-template
-cd commonlibsse-ng-template
+git clone clone https://github.com/Styyx1/ValorPerks --recursive
+cd ValorPerks
+git checkout xmake-dev
 ```
 
 ### Build
@@ -42,3 +68,9 @@ xmake repo --update
 xmake require --upgrade
 ```
 
+# Credits
+* This DLL is a fork of [colinswrath's](https://github.com/colinswrath) DLL for [Blade and Blunt](https://github.com/colinswrath/BladeAndBlunt) by SimonMagus. 
+* A majority of the original RE work for Blade and Blunt was done by [KernalsEgg](https://github.com/KernalsEgg). 
+* This DLL includes code from [dTry's](https://github.com/D7ry) DLL for [Valhalla Combat](https://github.com/D7ry/valhallaCombat) and [colinswrath's](https://github.com/colinswrath) DLL for [Hand to Hand](https://github.com/colinswrath/handtohand) by SimonMagus.
+* [CharmedBaron](https://github.com/CharmedBaryon) for Commonlib-NG.
+* [Alandtse](https://github.com/alandtse) for Clib-VR with NG branch.
