@@ -42,5 +42,3 @@ xmake repo --update
 xmake require --upgrade
 ```
 
-## Documentation
-Please refer to the [Wiki](../../wiki/Home) for more advanced topics.

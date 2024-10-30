@@ -1,0 +1,63 @@
+{
+    __meta__ = {
+        version = "1.0"
+    },
+    ["windows|x64"] = {
+        ["cmake#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "d885463d7cea3253b436ded2f4f17fd8423c4eaa",
+                url = "https://github.com/xmake-io/xmake-repo.git"
+            },
+            version = "3.30.3"
+        },
+        ["directxmath#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "b2d6e85d23e92d8b8aade0f5cf926075912e7e37",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "2024.02"
+        },
+        ["directxtk#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "b2d6e85d23e92d8b8aade0f5cf926075912e7e37",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "24.2.0"
+        },
+        ["rapidcsv#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "e328ef3c5cf3dcd398a44029070266a0c4988ff2",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "8.84"
+        },
+        ["simpleini#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "193aab3a94c28a30d8d509b1c21ee9ec1db458bf",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "v4.22"
+        },
+        ["spdlog#c9428c73"] = {
+            repo = {
+                branch = "master",
+                commit = "e328ef3c5cf3dcd398a44029070266a0c4988ff2",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "v1.14.1"
+        },
+        ["xbyak#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "e328ef3c5cf3dcd398a44029070266a0c4988ff2",
+                url = "https://gitlab.com/tboox/xmake-repo.git"
+            },
+            version = "v7.06"
+        }
+    }
+}
