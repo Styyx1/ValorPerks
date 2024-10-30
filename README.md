@@ -33,9 +33,10 @@
 
 ## Getting Started
 ```bat
-git clone clone https://github.com/Styyx1/ValorPerks --recursive
+git clone clone https://github.com/Styyx1/ValorPerks
 cd ValorPerks
 git checkout xmake-dev
+git submodule update --init --recursive
 ```
 
 ### Build
